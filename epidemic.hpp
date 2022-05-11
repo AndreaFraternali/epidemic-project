@@ -11,13 +11,18 @@ struct population {
   int R;
 };
 
-class epidemia {
+class epidemic {
   std::vector<population> days(double delta_t);
 
   for (int i = 0; i != delta_t; ++i) {
+    population p_before = days [i-1];
+    population p= days[i];
     if (i = 0) {
       days[0] = {int S0, int I0, int R0};
-    };  else {
+    };  
+    else {
+      p.S = p_before.S -
+      days[i] = {}
     };
   };
-};
+}
