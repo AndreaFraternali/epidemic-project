@@ -12,17 +12,22 @@ struct population {
 };
 
 class epidemic {
-  std::vector<population> days(double delta_t);
+  double gamma;
+  double beta;
+  std::vector<population> days;
+  population initial_population;
 
-  for (int i = 0; i != delta_t; ++i) {
+  public:
+  epidemic(population initial_pop) : initial_population{initial_pop} {};  
+
+  void evolution (int S0, int I0, int R0, double delta_t) {
+    days[0]={S0,I0,R0};
+  for (int i = 1; i != delta_t+1; ++i) {
     population p_before = days [i-1];
     population p= days[i];
-    if (i = 0) {
-      days[0] = {int S0, int I0, int R0};
-    };  
-    else {
-      p.S = p_before.S -
-      days[i] = {}
-    };
+    
+      p.S = p_before.S -beta*(p_before.S/N)*p_before.I;
+      
   };
-}
+};
+};
