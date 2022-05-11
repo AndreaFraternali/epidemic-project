@@ -1,3 +1,6 @@
+//qui definizioni di classi e dichiarazioni di metodi e funzioni 
+
+
 #ifndef EPIDEMIC_HPP
 #define EPIDEMIC_HPP
 
