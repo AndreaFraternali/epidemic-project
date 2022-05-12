@@ -4,7 +4,7 @@
 #ifndef EPIDEMIC_HPP
 #define EPIDEMIC_HPP
 
-
+#include <stdexcept>
 #include <ostream>
 
 struct Day {
@@ -22,7 +22,17 @@ class Epidemic {
   Day today_{};
 
   public:
-  explicit Epidemic(double gamma, double beta, Day today) : gamma_{gamma}, beta_{beta}, today_{today} {};  
+  explicit Epidemic(double gamma, double beta, Day today) : gamma_{gamma}, beta_{beta}, today_{today} {
+
+    if(gamma < 0 || gamma > 1){
+      throw std::runtime_error{"Gamma parameter must be between 0 and 1"};
+    }
+
+    if(beta < 0 || beta > 1){
+      throw std::runtime_error{"Beta parameter must be between 0 and 1"};
+    }
+
+  };  
 
   Day state(); 
 
