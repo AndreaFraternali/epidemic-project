@@ -1,6 +1,6 @@
 //qui definizioni di classi e dichiarazioni di metodi e funzioni 
 //io userei _ finale per le variabili membro, classi user-defined si scrivono con iniziale maiuscola
-
+//prova
 #ifndef EPIDEMIC_HPP
 #define EPIDEMIC_HPP
 
