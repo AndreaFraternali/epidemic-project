@@ -7,9 +7,9 @@
 #include <ostream>
 
 struct Day {
-  int S;
-  int I;
-  int R;
+  double S;
+  double I;
+  double R;
 };
 
 std::ostream& operator<<(std::ostream& os, Day const& d);
@@ -31,6 +31,10 @@ class Epidemic {
       throw std::runtime_error{"Beta parameter must be between 0 and 1"};
     }
 
+    if(today_.I < 0 || today_.S < 0 || today_.R < 0){
+      throw std::runtime_error{"SIR model parameters cannot be negative"};
+    }
+
   };  
 
   Day state(); 
@@ -39,7 +43,7 @@ class Epidemic {
   double getBeta();
 
   //ritorna lo stato dell'epidemia al giorno today + d
-  Day evolve(int const d);
+  void evolve(int const d);
   
 };
 
