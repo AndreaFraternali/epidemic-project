@@ -7,9 +7,9 @@
 #include <ostream>
 
 struct Day {
-  double S;
-  double I;
-  double R;
+  int S; 
+  int I;
+  int R;
 };
 
 std::ostream& operator<<(std::ostream& os, Day const& d);
