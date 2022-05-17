@@ -7,7 +7,7 @@
 #include <ostream>
 
 struct Day {
-  int S; //li vuole interi
+  int S; 
   int I;
   int R;
 };
