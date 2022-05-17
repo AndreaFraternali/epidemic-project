@@ -42,7 +42,7 @@ class Epidemic {
   double getGamma();
   double getBeta();
 
-  //ritorna lo stato dell'epidemia al giorno today + d
+  //evolve l'epidemia al giorno today + d
   void evolve(int const d);
   
 };

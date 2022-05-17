@@ -25,8 +25,7 @@ void Epidemic::evolve(int d) {
     today_.I = tmp_today.I + beta_ * (tmp_today.S / N) * tmp_today.I -
                gamma_ * tmp_today.I;
     today_.R = tmp_today.R + gamma_ * tmp_today.I;
-    std::cout << "N - (S + I + R) = " << N - today_.S - today_.I - today_.R     //non è consistente con i valori ottenuti
-              << '\n';
-    // assert(N == today_.S + today_.I + today_.R)  fallisce spesso
+  
+    assert(today_.S + today_.I + today_.R < N + 1 && today_.S + today_.I + today_.R > N - 1);
   }
 }
