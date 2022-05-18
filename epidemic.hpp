@@ -18,10 +18,11 @@ class Epidemic {
 
   double gamma_{};
   double beta_{};
+  double v_ratio_ {};
   Day today_{};
 
   public:
-  explicit Epidemic(double gamma, double beta, Day today) : gamma_{gamma}, beta_{beta}, today_{today} {
+  explicit Epidemic(double gamma, double beta, double v_ratio, Day today) : gamma_{gamma}, beta_{beta}, v_ratio_{v_ratio}, today_{today} {
 
     if(gamma < 0 || gamma > 1){
       throw std::runtime_error{"Gamma parameter must be between 0 and 1"};
@@ -29,6 +30,10 @@ class Epidemic {
 
     if(beta < 0 || beta > 1){
       throw std::runtime_error{"Beta parameter must be between 0 and 1"};
+    }
+
+     if(v_ratio < 0 || v_ratio > 1){
+      throw std::runtime_error{"v_ratio must be between 0 and 1"};
     }
 
     if(today_.I < 0 || today_.S < 0 || today_.R < 0){

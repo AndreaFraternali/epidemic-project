@@ -1,4 +1,4 @@
-#include "epidemic.cpp"
+#include "epidemic.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <vector>
