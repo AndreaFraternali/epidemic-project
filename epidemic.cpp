@@ -27,10 +27,10 @@ void Epidemic::evolve(int d) {
   for (int i = 0; i != d; ++i) {
     auto yesterday = today_;
 
-    double tmp_S = yesterday.S - beta_ * (yesterday.S / N) * yesterday.I;
+    double tmp_S = yesterday.S - beta_ * (yesterday.S / N) * yesterday.I - v_ratio_ * yesterday.S;
     double tmp_I = yesterday.I + beta_ * (yesterday.S / N) * yesterday.I -
                    gamma_ * yesterday.I;
-    double tmp_R = yesterday.R + gamma_ * yesterday.I;
+    double tmp_R = yesterday.R + gamma_ * yesterday.I + v_ratio_ * yesterday.S;
 
     today_.S = std::round(tmp_S);
     today_.I = std::round(tmp_I);
