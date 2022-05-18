@@ -7,8 +7,7 @@
 #include <iostream>
 
 std::ostream& operator<<(std::ostream& os, Day const& d) {
-  return os << "S = " << d.S << std::setw(7) << "I = " << d.I << std::setw(7)
-            << "R = " << d.R;
+  return os << std::setw(8) << "S = " << d.S << std::setw(8) << "I = " << d.I << std::setw(8) << "R = " << d.R;
 }
 
 double fractional(double x) { return x - std::floor(x); }
@@ -20,7 +19,7 @@ double Epidemic::getBeta() { return beta_; }
 double Epidemic::getGamma() { return gamma_; }
 
 void Epidemic::evolve(int d) {
-
+  
   double const N = today_.S + today_.R + today_.I;
   assert(N > 0);
 
@@ -41,37 +40,28 @@ void Epidemic::evolve(int d) {
     double fract_R = fractional(tmp_R);
 
     if (N < today_.S + today_.I + today_.R) {
-
       if (fract_I < fract_S && fract_I < fract_R) {
         today_.I = std::floor(tmp_I);
-      }
-      else{
-
+      } else {
         if (fract_S < fract_I && fract_S < fract_R) {
           today_.S = std::floor(tmp_S);
-        }
-        else{
+        } else {
           today_.R = std::floor(tmp_R);
         }
-     
       }
     }
 
     if (N > today_.S + today_.I + today_.R) {
-
       if (fract_I > fract_S && fract_I > fract_R) {
         today_.I = std::ceil(tmp_I);
       }
 
-      else{
-
+      else {
         if (fract_S > fract_I && fract_S > fract_R) {
           today_.S = std::ceil(tmp_S);
-        }
-        else{
+        } else {
           today_.R = std::ceil(tmp_R);
         }
-     
       }
     }
     assert(N == today_.S + today_.I + today_.R);
