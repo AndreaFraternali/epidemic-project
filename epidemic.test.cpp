@@ -12,7 +12,9 @@ TEST_CASE("testing evolve") {
     Epidemic epidemic{gamma, beta, v_ratio, today};
     epidemic.evolve(1);
     auto s = epidemic.state();
-    CHECK(s == Day{9979, 20, 1});
+    CHECK(s.S == 9979);
+     CHECK(s.I == 20);
+      CHECK(s.R == 1);
   }
 
 
