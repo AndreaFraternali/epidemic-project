@@ -7,8 +7,9 @@ TEST_CASE("testing evolve") {
   SUBCASE("tot persone, tot giorni") {
     double gamma = ;
     double beta = ;
+    double v_ratio = ;
     Day today{};
-    Epidemic epidemic{gamma, beta, today};
+    Epidemic epidemic{gamma, beta, v_ratio, today};
     epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s == Day{});
