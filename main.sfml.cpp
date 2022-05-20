@@ -8,7 +8,7 @@
 // Function which converts positions from SFML coordinates to user-defined ones,
 // centred in origin
 sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
-  return sf::Vector2f{p.x + origin.x + 5, origin.y - p.y - 10};
+  return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
 }
 
 int main() {
@@ -24,8 +24,8 @@ int main() {
   }
 
   // graphics
-  float display_width = 0.7 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.8 * sf::VideoMode::getDesktopMode().height;
+  float display_width = 0.6 * sf::VideoMode::getDesktopMode().width;
+  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "SIR model graphics");
@@ -52,16 +52,13 @@ int main() {
   x_axis[0].color = sf::Color::Black;
   x_axis[1].color = sf::Color::Black;
 
-  sf::CircleShape Spoint{};
-  Spoint.setRadius(5);
+  sf::CircleShape Spoint{3};
   Spoint.setFillColor(sf::Color::Green);
 
-  sf::CircleShape Ipoint{};
-  Ipoint.setRadius(5);
+  sf::CircleShape Ipoint{3};
   Ipoint.setFillColor(sf::Color::Red);
 
-  sf::CircleShape Rpoint{};
-  Rpoint.setRadius(5);
+  sf::CircleShape Rpoint{3};
   Rpoint.setFillColor(sf::Color::Blue);
 
   // game loop
