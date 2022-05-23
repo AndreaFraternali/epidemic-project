@@ -1,12 +1,12 @@
-//aggiungere numeri, legenda e aggiustare distanze 
+//rifiniture 
 
 #include "epidemic.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-// Function which converts positions from SFML coordinates to user-defined ones,
-// centred in origin
+// Function which converts positions from user-defined coordinates,
+// centred in origin, to SFML ones
 sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
   return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
 }
@@ -14,7 +14,7 @@ sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
 int main() {
   // acquiring data
 
-  int days = 120;
+  int days = 200;
   int N = 100000;
   Epidemic epidemic{0.0117399, 0.19317, 0, Day{N, 300, 0}};
   std::vector<Day> evolution{};
@@ -36,12 +36,10 @@ int main() {
 
   double xmax = 0.9 * display_width;
   double ymax = 0.1 * display_height;
-  double xscale = (xmax - origin.x) / days;  
-  double yscale = (origin.y - ymax) / N;  
   double delta_x = 0.01 * display_width;
-  double delta_y = 0.02 * display_height;   
+  double delta_y = 0.02 * display_height;
 
-  //setting degli assi cartesiani
+  // setting degli assi cartesiani
   y_axis[0].position = origin;
   y_axis[1].position = sf::Vector2f(origin.x, ymax - delta_y);
   y_axis[0].color = sf::Color::Black;
@@ -51,8 +49,8 @@ int main() {
   x_axis[1].position = sf::Vector2f(xmax + delta_x, origin.y);
   x_axis[0].color = sf::Color::Black;
   x_axis[1].color = sf::Color::Black;
-   
 
+  // setting dei punti
   sf::CircleShape Spoint{3};
   Spoint.setFillColor(sf::Color::Green);
   sf::CircleShape Ipoint{3};
@@ -60,10 +58,9 @@ int main() {
   sf::CircleShape Rpoint{3};
   Rpoint.setFillColor(sf::Color::Blue);
 
-
-  //Setting degli oggetti per la legenda
+  // Setting degli oggetti per la legenda
   sf::Font font{};
-  if(!font.loadFromFile("times.ttf")){
+  if (!font.loadFromFile("times.ttf")) {
     throw std::runtime_error("Opening font file failed");
   }
 
@@ -75,7 +72,7 @@ int main() {
   legI.setPosition(0.7 * display_width, 0.09 * display_height);
   sf::Text legR{"Rimossi", font, 24};
   legR.setFillColor(sf::Color::Black);
-  legR.setPosition(0.7 * display_width, 0.13 * display_height); 
+  legR.setPosition(0.7 * display_width, 0.13 * display_height);
 
   sf::CircleShape Scirc{8};
   Scirc.setFillColor(sf::Color::Green);
@@ -87,7 +84,9 @@ int main() {
   Rcirc.setFillColor(sf::Color::Blue);
   Rcirc.setPosition(0.85 * display_width, 0.145 * display_height);
 
-
+  // fattori di riscalo per le posizioni
+  double xscale = (xmax - origin.x) / days;
+  double yscale = (origin.y - ymax) / N;
 
   // game loop
   while (window.isOpen()) {
@@ -103,37 +102,50 @@ int main() {
     window.draw(y_axis);
     window.draw(x_axis);
 
+    // drawing legend
     window.draw(legS);
     window.draw(legI);
     window.draw(legR);
-
     window.draw(Scirc);
     window.draw(Icirc);
     window.draw(Rcirc);
 
-    for (int i = 0; i != days ; i++) {
+    // drawing points
+    for (int i = 0; i != days; i++) {
       Spoint.setPosition(ConvertCoordinates(
-          sf::Vector2f(i * xscale, evolution[i].S * yscale),
-          origin)); 
+          sf::Vector2f(i * xscale, evolution[i].S * yscale), origin));
       Ipoint.setPosition(ConvertCoordinates(
-          sf::Vector2f(i * xscale, evolution[i].I * yscale),
-          origin));
+          sf::Vector2f(i * xscale, evolution[i].I * yscale), origin));
       Rpoint.setPosition(ConvertCoordinates(
-          sf::Vector2f(i * xscale, evolution[i].R * yscale),
-          origin));
+          sf::Vector2f(i * xscale, evolution[i].R * yscale), origin));
       window.draw(Spoint);
       window.draw(Ipoint);
       window.draw(Rpoint);
     }
 
-    //da sistemare
-    for(double i = origin.x; i < xmax ; i += 10 * xscale){
-      sf::Text num{std::to_string((i - origin.x)/xscale), font, 18};
+    // scrive i numeri lungo gli assi
+    for (double i = origin.x; i <= xmax; i += days / 10 * xscale) {
+      int n = (i - origin.x) / xscale;
+      sf::Text num{std::to_string(n), font, 18};
       num.setFillColor(sf::Color::Black);
       num.setPosition(i, origin.y + delta_y);
       window.draw(num);
     }
-      
+    sf::Text num{std::to_string(days), font, 18};
+    num.setFillColor(sf::Color::Black);
+    num.setPosition(xmax, origin.y + delta_y);
+    window.draw(num);
+
+    for (double i = origin.y; i >= ymax; i -= N / 10 * yscale) {
+      int n = (origin.y - i) / yscale;
+      sf::Text num{std::to_string(n), font, 18};
+      num.setFillColor(sf::Color::Black);
+      num.setPosition(origin.x - 6 * delta_x, i - delta_y);
+      window.draw(num);
+    }
+    num.setString(std::to_string(N));
+    num.setPosition(origin.x - 6.5 * delta_x, ymax - delta_y);
+    window.draw(num);
 
     window.display();
   }
