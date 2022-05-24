@@ -7,6 +7,10 @@
 std::vector<Cell> Grid::state() { return grid_; }
 
 
+
+std::vector<Cell> Grid::state() { return grid_; }
+
+
 void Grid::evolve(int d){
-    
+
 }
