@@ -1,25 +1,28 @@
 #ifndef AUTOMATON_HPP
-#define AUTOMA_HPP
+#define AUTOMATON_HPP
 
-
+#include <random>
 #include <vector>
-#include<random>
 
-  enum class Cell {S, I, R};
+enum class Cell { S, I, R };
 
-class Grid{
-    int side_;
-    std::vector<Cell> row;
-    std::vector<std::vector<Cell>> column; //perchè non posso fare vettore di righe?
-    
-    public: Grid(int side): side_(side)  {};
-     
-    for(int i=0, i<side, ++i) { //???
-    row.push_back(Cell::S);
+class Grid {
+  std::vector<Cell> grid_;
+  int width_;
+  int heigth_;
+
+ public:
+  Grid(int width, int heigth) : width_{width}, heigth_{heigth} {
+
+    for(int i = 0; i != heigth * width; i++){
+      grid_.push_back(Cell::S);
     }
-    
-     
 
+  };
+
+  std::vector<Cell> state();
+
+  void evolve(int d);
 };
 
 #endif
