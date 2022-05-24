@@ -10,6 +10,8 @@ class Grid {
   std::vector<Cell> grid_;
   int width_;
   int heigth_;
+  double beta_; // prob da S a I quando delle celle S attorno ad I
+  double gamma_; // prob da I a R in generale
 
  public:
   Grid(int width, int heigth) : width_{width}, heigth_{heigth} {
