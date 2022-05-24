@@ -1,8 +1,9 @@
-//rifiniture 
+// rifiniture: validare l'input e aggiustare distanze
 
 #include "epidemic.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <vector>
 
 // Function which converts positions from user-defined coordinates,
@@ -12,11 +13,27 @@ sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
 }
 
 int main() {
-  // acquiring data
+  std::cout << "Numero di giorni: ";
+  int days;
+  std::cin >> days;
+  std::cout << "Suscettibili iniziali ";
+  int s;
+  std::cin >> s;
+  std::cout << "Infetti iniziali ";
+  int i;
+  std::cin >> i;
+  std::cout << "Rimossi iniziali ";
+  int r;
+  std::cin >> r;
+  std::cout << "Beta = ";
+  double beta;
+  std::cin >> beta;
+  std::cout << "Gamma = ";
+  double gamma;
+  std::cin >> gamma;
+  Epidemic epidemic{0.0117399, 0.19317, Day{s, i, r}};
+  int const N = s + i + r;
 
-  int days = 100;
-  int N = 100000;
-  Epidemic epidemic{0.0117399, 0.19317, 0, Day{N, 300, 0}};
   std::vector<Day> evolution{};
   for (int i = 0; i != days; i++) {
     epidemic.evolve(1);
