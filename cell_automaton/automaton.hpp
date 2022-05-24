@@ -1,7 +1,6 @@
 #ifndef AUTOMATON_HPP
 #define AUTOMATON_HPP
 
-#include <random>
 #include <vector>
 
 enum class Cell { S, I, R };
