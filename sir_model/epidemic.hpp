@@ -14,6 +14,8 @@ struct Day {
 
 std::ostream& operator<<(std::ostream& os, Day const& d);
 
+bool operator==(Day const& d1, Day const& d2);
+
 class Epidemic {
 
   double gamma_{};

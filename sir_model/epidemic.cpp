@@ -9,6 +9,10 @@ std::ostream& operator<<(std::ostream& os, Day const& d) {
   return os << std::setw(8) << "S = " << d.S << std::setw(8) << "I = " << d.I << std::setw(8) << "R = " << d.R;
 }
 
+bool operator==(Day const& d1, Day const& d2){
+  return d1.S == d2.S && d1.I == d2.I && d1.R == d2.R;
+}
+
 double fractional(double x) { return x - std::floor(x); }
 
 Day Epidemic::state() { return today_; }
