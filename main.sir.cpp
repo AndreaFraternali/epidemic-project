@@ -14,7 +14,7 @@ sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
 int main() {
   // acquiring data
 
-  int days = 200;
+  int days = 100;
   int N = 100000;
   Epidemic epidemic{0.0117399, 0.19317, 0, Day{N, 300, 0}};
   std::vector<Day> evolution{};
@@ -30,8 +30,8 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "SIR model graphics");
 
-  sf::VertexArray y_axis(sf::Lines, 2);
-  sf::VertexArray x_axis(sf::Lines, 2);
+  sf::VertexArray y_axis{sf::Lines, 2};
+  sf::VertexArray x_axis{sf::Lines, 2};
   sf::Vector2f origin{0.1f * display_width, 0.9f * display_height};
 
   double xmax = 0.9 * display_width;
@@ -135,6 +135,10 @@ int main() {
     num.setFillColor(sf::Color::Black);
     num.setPosition(xmax, origin.y + delta_y);
     window.draw(num);
+    sf::Text label{"(giorni)", font, 18};
+    label.setFillColor(sf::Color::Black);
+    label.setPosition(xmax + 1.5 * delta_x, origin.y - delta_y);
+    window.draw(label);
 
     for (double i = origin.y; i >= ymax; i -= N / 10 * yscale) {
       int n = (origin.y - i) / yscale;
@@ -146,6 +150,9 @@ int main() {
     num.setString(std::to_string(N));
     num.setPosition(origin.x - 6.5 * delta_x, ymax - delta_y);
     window.draw(num);
+    label.setString("(persone)");
+    label.setPosition(origin.x - 3 * delta_x, ymax - 3 * delta_y);
+    window.draw(label);
 
     window.display();
   }
