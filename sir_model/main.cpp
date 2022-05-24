@@ -1,14 +1,27 @@
+#include <iomanip>
+#include <iostream>
+
 #include "epidemic.hpp"
 
-#include <iostream>
-#include <iomanip>
-
+// dobbiamo mettere parametri selezionabili dall'utente
 int main() {
-  Epidemic epidemic{0.0117399, 0.19317, 0, Day{100000, 100, 0}};
+  double gamma;  // non so se ci va il _ :-)
+  double beta;
+  double v_ratio;
+  int S;
+  int I;
+  int R;
+  int days;
+  //andre so che non apprezzerai questa parte
+  std::cout<< "gamma " ; std::cin >> gamma;
+  std::cout<< "beta "; std::cin >> beta;
+  std::cout<< "v_ratio "; std::cin >> v_ratio;
+  std::cout<< "S "; std::cin >> S;
+  std::cout<< "I "; std::cin >> I;
+  std::cout<< "R "; std::cin >> R;
+  std::cout<< "days "; std::cin >> days;
+  Day today{S, I, R};
+  Epidemic epidemic{gamma, beta, v_ratio, today};
+  epidemic.evolve(days);
   std::cout << epidemic.state() << '\n';
-  for (int i = 0; i != 60; i++) {
-    epidemic.evolve(1);
-    auto s = epidemic.state();
-    std::cout << s << std::setw(10) << "day " << i + 2 << '\n';
-  }
 }

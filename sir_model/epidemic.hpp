@@ -46,7 +46,7 @@ class Epidemic {
 
   Day state(); 
 
-  double getGamma();
+  double getGamma(); 
   double getBeta();
 
   //evolve l'epidemia al giorno today + d

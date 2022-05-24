@@ -2,7 +2,7 @@
 #include "doctest.h"
 
 #include "epidemic.hpp"
-
+//ora c'è l'operator== per i Day, da togliere il .S
 TEST_CASE("testing evolve") {
   SUBCASE("1 giorno, 10000 persone, 9980 s, 20 i, 0 r, epidemia in espansione") {
     double gamma = 0.046 ;
