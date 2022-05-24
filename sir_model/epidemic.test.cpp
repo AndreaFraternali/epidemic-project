@@ -2,7 +2,7 @@
 #include "doctest.h"
 
 #include "epidemic.hpp"
-//ora c'è l'operator== per i Day, da togliere il .S
+
 TEST_CASE("testing evolve") {
   SUBCASE("1 giorno, 10000 persone, 9980 s, 20 i, 0 r, epidemia in espansione") {
     double gamma = 0.046 ;
@@ -15,6 +15,18 @@ TEST_CASE("testing evolve") {
     CHECK(s.S == 9979);
      CHECK(s.I == 20);
       CHECK(s.R == 1);
+  }
+  SUBCASE("0 giorni, 10000 persone, 9980 s, 20 i, 0 r") {
+    double gamma = 0.046 ;
+    double beta = 0.056 ;
+    double v_ratio = 0;
+    Day today{9980, 20, 0};
+    Epidemic epidemic{gamma, beta, v_ratio, today};
+    epidemic.evolve(0);
+    auto s = epidemic.state();
+    CHECK(s.S == 9980);
+     CHECK(s.I == 20);
+      CHECK(s.R == 0);
   }
   SUBCASE("1 giorno,10000 persone, 9000 s, 1000 i, 0 r, epidemia in espansione ") {
     double gamma = 0.046 ;
