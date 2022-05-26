@@ -1,7 +1,7 @@
 // rifiniture: validare l'input e aggiustare distanze
 
 #include "epidemic.hpp"
-
+#include "graph.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -13,16 +13,16 @@ sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
 }
 
 int main() {
-  std::cout << "Numero di giorni: ";
+  std::cout << "Numero di giorni =  ";
   int days;
   std::cin >> days;
-  std::cout << "Suscettibili iniziali ";
+  std::cout << "Suscettibili iniziali = ";
   int s;
   std::cin >> s;
-  std::cout << "Infetti iniziali ";
+  std::cout << "Infetti iniziali = ";
   int i;
   std::cin >> i;
-  std::cout << "Rimossi iniziali ";
+  std::cout << "Rimossi iniziali = ";
   int r;
   std::cin >> r;
   std::cout << "Beta = ";
@@ -31,7 +31,7 @@ int main() {
   std::cout << "Gamma = ";
   double gamma;
   std::cin >> gamma;
-  Epidemic epidemic{0.0117399, 0.19317, Day{s, i, r}};
+  Epidemic epidemic{beta, gamma, Day{s, i, r}};
   int const N = s + i + r;
 
   std::vector<Day> evolution{};
@@ -47,8 +47,7 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "SIR model graphics");
 
-  sf::VertexArray y_axis{sf::Lines, 2};
-  sf::VertexArray x_axis{sf::Lines, 2};
+
   sf::Vector2f origin{0.1f * display_width, 0.9f * display_height};
 
   double xmax = 0.9 * display_width;
@@ -56,16 +55,7 @@ int main() {
   double delta_x = 0.01 * display_width;
   double delta_y = 0.02 * display_height;
 
-  // setting degli assi cartesiani
-  y_axis[0].position = origin;
-  y_axis[1].position = sf::Vector2f(origin.x, ymax - delta_y);
-  y_axis[0].color = sf::Color::Black;
-  y_axis[1].color = sf::Color::Black;
-
-  x_axis[0].position = origin;
-  x_axis[1].position = sf::Vector2f(xmax + delta_x, origin.y);
-  x_axis[0].color = sf::Color::Black;
-  x_axis[1].color = sf::Color::Black;
+  Graph graph{origin, xmax, ymax};
 
   // setting dei punti
   sf::CircleShape Spoint{3};
@@ -116,9 +106,7 @@ int main() {
     }
     window.clear(sf::Color::White);
 
-    window.draw(y_axis);
-    window.draw(x_axis);
-
+   
     // drawing legend
     window.draw(legS);
     window.draw(legI);
@@ -135,9 +123,6 @@ int main() {
           sf::Vector2f(i * xscale, evolution[i].I * yscale), origin));
       Rpoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].R * yscale), origin));
-      window.draw(Spoint);
-      window.draw(Ipoint);
-      window.draw(Rpoint);
     }
 
     // scrive i numeri lungo gli assi
@@ -170,6 +155,9 @@ int main() {
     label.setString("(persone)");
     label.setPosition(origin.x - 3 * delta_x, ymax - 3 * delta_y);
     window.draw(label);
+
+ window.draw(graph);
+
 
     window.display();
   }
