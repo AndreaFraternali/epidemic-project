@@ -20,7 +20,6 @@ class Epidemic {
 
   double gamma_{};
   double beta_{};
-  double v_ratio_ {};
   Day today_{};
 
   public:
