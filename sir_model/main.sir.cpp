@@ -16,13 +16,13 @@ int main() {
   std::cout << "Numero di giorni: ";
   int days;
   std::cin >> days;
-  std::cout << "Suscettibili iniziali ";
+  std::cout << "Suscettibili iniziali: ";
   int s;
   std::cin >> s;
-  std::cout << "Infetti iniziali ";
+  std::cout << "Infetti iniziali: ";
   int i;
   std::cin >> i;
-  std::cout << "Rimossi iniziali ";
+  std::cout << "Rimossi iniziali: ";
   int r;
   std::cin >> r;
   std::cout << "Beta = ";
