@@ -1,7 +1,7 @@
+#include "automaton.hpp"
 
 #include <iostream>
 #include <random>
-#include "automaton.hpp"
 
 int main() {
   int const width = 4;
@@ -25,5 +25,5 @@ int main() {
     std::cout << '\n' << '\n';
     autom.evolve();
     autom.print();
-    }
+  }
 }

@@ -31,7 +31,7 @@ class Automaton {
 
   bool set(int i, Cell s);  // restituisce true se attualmente la cella i è diversa da s
 
-  void print();
+  void print(); //stampa la griglia grid_
 };
 
 #endif

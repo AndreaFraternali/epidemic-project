@@ -4,6 +4,7 @@
 // usiamo n/8 * beta probabilità di infettarsi con n numero di infetti intorno
 
 #include "automaton.hpp"
+
 #include <iomanip>
 #include <iostream>
 #include <random>
