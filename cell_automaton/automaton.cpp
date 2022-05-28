@@ -1,10 +1,11 @@
 
-// uso random per mettere un suscettibile in un punto a caso (se si può fare)
+
 // uso random per confrontarlo con probabilità gamma di infettarsi
 // usiamo n/8 * beta probabilità di infettarsi con n numero di infetti intorno
-// se volessimo fare un test, solo griglia con evolve(0) che restituisce se
-// stessa
+
 #include "automaton.hpp"
+#include <iomanip>
+#include <iostream>
 #include <random>
 
 bool prob(double n) {
@@ -13,46 +14,77 @@ bool prob(double n) {
   return dis(gen) < n;
 }
 
-std::vector<Cell> Grid::state() { return grid_; }
+std::ostream& operator<<(std::ostream& os, Cell c) {
+  if (c == Cell::S) {
+    return os << "S";
+  } else {
+    return (c == Cell::I) ? os << "I" : os << "R";
+  }
+}
 
-int Grid::check(int const i, int const j) {
+void Automaton::print() {
+  for (int j = 0; j != heigth_; j++) {
+    for (int i = 0; i != width_; i++) {
+      std::cout << grid_[i + j * width_] << std::setw(4);
+    }
+    std::cout << '\n';
+  }
+}
+
+bool Automaton::set(int i, Cell s) {
+  if (grid_[i] != s) {
+    grid_[i] = s;
+    return true;
+  }
+  return false;
+}
+
+int Automaton::check(int const i, int const j, Grid g) {
   int n = 0;
   for (int k = i - 1; k != i + 2; k++) {
+    for (int h = j - 1; h != j + 2; h++) {
+      int tmp_k = k;
+      int tmp_h = h;
 
-    for (int h = j - 1; h != j - 2; h++) {
-
-      if (grid_[k + h * width_] == Cell::I) {
-        n++;
+      if (k < 0) {
+        tmp_k += width_;
+      }
+      if (k >= width_) {
+        tmp_k -= width_;
+      }
+      if (h < 0) {
+        tmp_h += heigth_;
+      }
+      if (h >= heigth_) {
+        tmp_h -= heigth_;
       }
 
+      if (g[tmp_k + tmp_h * width_] == Cell::I) {
+        n++;
+      }
     }
-
   }
   return n;
 }
 
-void Grid::evolve(int d) {
-  for (int i = 0; i < width_;
+void Automaton::evolve() {
+  Grid yesterday = grid_;
+  for (int i = 0; i != width_;
        i++) {  // i è l'indice di colonna, j quello di riga, l'indice del
                // vettore è [i + j * width]
-    
-    for (int j = 0; j < heigth_; j++) {
 
-      if (grid_[i + j * width_] == Cell::S) {
-
-        int n = check(i, j);
+    for (int j = 0; j != heigth_; j++) {
+      if (yesterday[i + j * width_] == Cell::S) {
+        int n = check(i, j, yesterday);
         if (prob(n * beta_ / 8)) {
-          grid_[i + j * width_] = Cell::I;
+          set(i + j * width_, Cell::I);
         }
 
       } else {
-
-        if (grid_[i + j * width_] == Cell::I) {
-          
+        if (yesterday[i + j * width_] == Cell::I) {
           if (prob(gamma_)) {
-            grid_[i + j * width_] = Cell::R;
+            set(i + j * width_, Cell::R);
           }
-
         }
       }
     }
