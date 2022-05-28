@@ -1,5 +1,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
 
 class Graph : public sf::Drawable {
 
