@@ -106,7 +106,8 @@ int main() {
     }
     window.clear(sf::Color::White);
 
-   
+    window.draw(graph);
+    
     // drawing legend
     window.draw(legS);
     window.draw(legI);
@@ -156,7 +157,7 @@ int main() {
     label.setPosition(origin.x - 3 * delta_x, ymax - 3 * delta_y);
     window.draw(label);
 
- window.draw(graph);
+
 
 
     window.display();
