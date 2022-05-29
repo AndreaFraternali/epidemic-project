@@ -10,7 +10,6 @@
 int main() {
   double gamma;  // non so se ci va il _ :-)
   double beta;
-  double v_ratio;
   int S;
   int I;
   int R;

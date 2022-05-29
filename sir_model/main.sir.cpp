@@ -31,7 +31,7 @@ int main() {
   std::cout << "Gamma = ";
   double gamma;
   std::cin >> gamma;
-  Epidemic epidemic{0.0117399, 0.19317, Day{s, i, r}};
+  Epidemic epidemic{beta, gamma, Day{s, i, r}};
   int const N = s + i + r;
 
   std::vector<Day> evolution{};
@@ -41,20 +41,20 @@ int main() {
   }
 
   // graphics
-  float display_width = 0.6 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
+  float display_width = .6f * sf::VideoMode::getDesktopMode().width;
+  float display_height = .7f * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "SIR model graphics");
 
   sf::VertexArray y_axis{sf::Lines, 2};
   sf::VertexArray x_axis{sf::Lines, 2};
-  sf::Vector2f origin{0.1f * display_width, 0.9f * display_height};
+  sf::Vector2f origin{.1f * display_width, .9f * display_height};
 
-  double xmax = 0.9 * display_width;
-  double ymax = 0.1 * display_height;
-  double delta_x = 0.01 * display_width;
-  double delta_y = 0.02 * display_height;
+  double xmax = .9 * display_width;
+  double ymax = .1 * display_height;
+  double delta_x = .01 * display_width;
+  double delta_y = .02 * display_height;
 
   // setting degli assi cartesiani
   y_axis[0].position = origin;
