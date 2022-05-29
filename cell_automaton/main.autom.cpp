@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 
 int main() {
   std::cout << "Larghezza = ";
@@ -23,15 +24,23 @@ int main() {
   double gamma;
   std::cin >> gamma;
 
-  float display_width = 0.6 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
+  float display_width = 0.8 * sf::VideoMode::getDesktopMode().width;
+  float display_height = 0.6 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
 
-  sf::VertexArray grid(sf::LineStrip, width * heigth);
-  for(int i = 0; i < width*heigth; i++){
-      grid[i].position = sf::Vector2f((i +100) * display_width, 0.5 * display_height);
+  std::vector<sf::RectangleShape> grid;
+
+  for (int i = 0; i != heigth; i++) {
+    for (int j = 0; j != width; j++) {
+      sf::RectangleShape r(sf::Vector2f{8, 8});
+      r.setOutlineColor(sf::Color::Black);
+      r.setOutlineThickness(2);
+      r.setPosition(sf::Vector2f(0.2 * display_width + j * 1000/width,
+                                 0.2 * display_height + i* 1000/heigth));
+      grid.push_back(r);
+    }
   }
 
   while (window.isOpen()) {
@@ -44,10 +53,10 @@ int main() {
     }
     window.clear(sf::Color::White);
 
-
-    window.draw(grid);
+    for (int i = 0; i != width * heigth; i++) {
+      window.draw(grid[i]);
+    }
 
     window.display();
   }
 }
-  
