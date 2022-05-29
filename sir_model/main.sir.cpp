@@ -2,15 +2,15 @@
 
 #include "epidemic.hpp"
 #include "graph.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <string>
 
 // Function which converts positions from user-defined coordinates,
 // centred in origin, to SFML ones
-sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
-  return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
-}
+
 
 int main() {
   std::cout << "Numero di giorni =  ";
@@ -46,7 +46,6 @@ int main() {
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "SIR model graphics");
-
 
   sf::Vector2f origin{0.1f * display_width, 0.9f * display_height};
 
@@ -84,10 +83,10 @@ int main() {
   Rcirc.setPosition(0.85 * display_width, 0.145 * display_height);
 
   // fattori di riscalo per le posizioni
-  double xscale = (xmax - origin.x) / days;
-  double yscale = (origin.y - ymax) / N;
+  double xscale = (xmax - origin.x - delta_x) / days;
+  double yscale = (origin.y - delta_y - ymax) / N;
 
-   // setting dei punti
+  // instance dei punti
   sf::CircleShape Spoint;
   sf::CircleShape Ipoint;
   sf::CircleShape Rpoint;
@@ -103,9 +102,7 @@ int main() {
     }
     window.clear(sf::Color::White);
 
-    //drawing graph
-    window.draw(graph);
-    
+
     // drawing legend
     window.draw(legS);
     window.draw(legI);
@@ -114,18 +111,17 @@ int main() {
     window.draw(Icirc);
     window.draw(Rcirc);
 
-    // drawing points
+    // adding points
     for (int i = 0; i != days; i++) {
       Spoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].S * yscale), origin));
-      graph.insert_sp(Spoint);
+      graph.add_sp(Spoint);
       Ipoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].I * yscale), origin));
-      graph.insert_ip(Ipoint);
+      graph.add_ip(Ipoint);
       Rpoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].R * yscale), origin));
-      graph.insert_rp(Rpoint);
-
+      graph.add_rp(Rpoint);
     }
 
     // scrive i numeri lungo gli assi
@@ -136,14 +132,6 @@ int main() {
       num.setPosition(i, origin.y + delta_y);
       window.draw(num);
     }
-    sf::Text num{std::to_string(days), font, 18};
-    num.setFillColor(sf::Color::Black);
-    num.setPosition(xmax, origin.y + delta_y);
-    window.draw(num);
-    sf::Text label{"(giorni)", font, 18};
-    label.setFillColor(sf::Color::Black);
-    label.setPosition(xmax + 1.5 * delta_x, origin.y - delta_y);
-    window.draw(label);
 
     for (double i = origin.y; i >= ymax; i -= N / 10 * yscale) {
       int n = (origin.y - i) / yscale;
@@ -152,15 +140,13 @@ int main() {
       num.setPosition(origin.x - 6 * delta_x, i - delta_y);
       window.draw(num);
     }
-    num.setString(std::to_string(N));
-    num.setPosition(origin.x - 6.5 * delta_x, ymax - delta_y);
-    window.draw(num);
-    label.setString("(persone)");
-    label.setPosition(origin.x - 3 * delta_x, ymax - 3 * delta_y);
-    window.draw(label);
+    
+    graph.add_xlabel("(giorni)");
+    graph.add_ylabel("(persone)");
 
-
-
+    
+    // drawing graph
+    window.draw(graph);
 
     window.display();
   }

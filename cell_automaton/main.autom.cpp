@@ -25,21 +25,22 @@ int main() {
   std::cin >> gamma;
 
   float display_width = 0.8 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.6 * sf::VideoMode::getDesktopMode().height;
+  float display_height = 0.65 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
 
-  std::vector<sf::RectangleShape> grid;
+  long unsigned n = 4 * width * heigth;
+  sf::VertexArray grid{
+      sf::LineStrip,
+      n};  // sf::LineStrip o sf::Quad ? non ho capito la differenza. con quad non si vede niente, con LineStrip roba brutta
+  sf::Vector2f topleft_vertex{.1f * display_width, .2f * display_height};
 
-  for (int i = 0; i != heigth; i++) {
-    for (int j = 0; j != width; j++) {
-      sf::RectangleShape r(sf::Vector2f{8, 8});
-      r.setOutlineColor(sf::Color::Black);
-      r.setOutlineThickness(2);
-      r.setPosition(sf::Vector2f(0.2 * display_width + j * 1000/width,
-                                 0.2 * display_height + i* 1000/heigth));
-      grid.push_back(r);
+  for (int i = 0; i != 2 * width; i++) {
+    for (int j = 0; j != 2 * heigth; j++) {
+      grid[i + j * width].position =
+          sf::Vector2f(topleft_vertex.x + i * 10, topleft_vertex.y + j * 10);
+      grid[i + j * width].color = sf::Color::Black;
     }
   }
 
@@ -51,12 +52,9 @@ int main() {
         window.close();
       }
     }
+
     window.clear(sf::Color::White);
-
-    for (int i = 0; i != width * heigth; i++) {
-      window.draw(grid[i]);
-    }
-
+    window.draw(grid);
     window.display();
   }
 }
