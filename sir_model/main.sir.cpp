@@ -57,14 +57,6 @@ int main() {
 
   Graph graph{origin, xmax, ymax};
 
-  // setting dei punti
-  sf::CircleShape Spoint{3};
-  Spoint.setFillColor(sf::Color::Green);
-  sf::CircleShape Ipoint{3};
-  Ipoint.setFillColor(sf::Color::Red);
-  sf::CircleShape Rpoint{3};
-  Rpoint.setFillColor(sf::Color::Blue);
-
   // Setting degli oggetti per la legenda
   sf::Font font{};
   if (!font.loadFromFile("times.ttf")) {
@@ -95,6 +87,11 @@ int main() {
   double xscale = (xmax - origin.x) / days;
   double yscale = (origin.y - ymax) / N;
 
+   // setting dei punti
+  sf::CircleShape Spoint;
+  sf::CircleShape Ipoint;
+  sf::CircleShape Rpoint;
+
   // game loop
   while (window.isOpen()) {
     // managing events
@@ -106,6 +103,7 @@ int main() {
     }
     window.clear(sf::Color::White);
 
+    //drawing graph
     window.draw(graph);
     
     // drawing legend
@@ -120,10 +118,14 @@ int main() {
     for (int i = 0; i != days; i++) {
       Spoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].S * yscale), origin));
+      graph.insert_sp(Spoint);
       Ipoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].I * yscale), origin));
+      graph.insert_ip(Ipoint);
       Rpoint.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].R * yscale), origin));
+      graph.insert_rp(Rpoint);
+
     }
 
     // scrive i numeri lungo gli assi

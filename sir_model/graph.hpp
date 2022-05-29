@@ -1,11 +1,14 @@
+#ifndef GRAPH_HPP
+#define GRAPH_HPP
+
+
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
 
 class Graph : public sf::Drawable {
 
-  sf::VertexArray y_axis_{sf::Lines, 2};
-  sf::VertexArray x_axis_{sf::Lines, 2};
+  sf::VertexArray y_axis_{};
+  sf::VertexArray x_axis_{};
   std::vector<sf::CircleShape> points_{};
 
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const{
@@ -18,7 +21,7 @@ class Graph : public sf::Drawable {
   }
 
  public:
-  Graph(sf::Vector2f origin, double xmax, double ymax) : y_axis_{}, x_axis_{} {
+  Graph(sf::Vector2f origin, double xmax, double ymax) : y_axis_{sf::Lines, 2}, x_axis_{sf::Lines, 2} {
     y_axis_[0].position = origin;
     y_axis_[1].position = sf::Vector2f(origin.x, ymax);
     y_axis_[0].color = sf::Color::Black;
@@ -34,3 +37,6 @@ class Graph : public sf::Drawable {
     void insert_ip(sf::CircleShape ip);
     void insert_rp(sf::CircleShape rp);
 };
+
+
+#endif
