@@ -2,47 +2,78 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <random>
 #include <vector>
+#include <thread> //necessario?
 
 int main() {
-  std::cout << "Larghezza = ";
-  int width;
-  std::cin >> width;
-  std::cout << "Altezza = ";
-  int heigth;
-  std::cin >> heigth;
-  std::cout << "Infetti iniziali = ";
-  int init_inf;
-  std::cin >> init_inf;
-  std::cout << "Rimossi iniziali = ";
-  int init_rem;
-  std::cin >> init_rem;
-  std::cout << "Beta = ";
-  double beta;
-  std::cin >> beta;
-  std::cout << "Gamma = ";
-  double gamma;
-  std::cin >> gamma;
+  // std::cout << "Larghezza = ";
+  // int width;
+  // std::cin >> width;
+  // std::cout << "Altezza = ";
+  // int heigth;
+  // std::cin >> heigth;
+  // std::cout << "Infetti iniziali = ";
+  // int init_inf;
+  // std::cin >> init_inf;
+  // std::cout << "Rimossi iniziali = ";
+  // int init_rem;
+  // std::cin >> init_rem;
+  // std::cout << "Beta = ";
+  // double beta;
+  // std::cin >> beta;
+  // std::cout << "Gamma = ";
+  // double gamma;
+  // std::cin >> gamma;
+  int width = 30;
+  int height = 20;
+  double beta = .3;
+  double gamma = .1;
+  int days = 100;
+  int init_inf = 5;
 
+  Automaton autom{width, height, beta, gamma};
+  std::random_device gen{};
+  std::uniform_int_distribution<int> dis{0, width * height - 1};
+  int i = 0;
+  do {
+    int n = dis(gen);
+    if (autom.set(n, Cell::I)) {
+      i++;
+    }
+  } while (i != init_inf);
+  std::vector<Grid> evolution{};
+  for (int i = 0; i != days; i++) {
+    autom.evolve();
+    evolution.push_back(autom.state());
+  }
+
+  //graphics
   float display_width = 0.8 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.65 * sf::VideoMode::getDesktopMode().height;
+  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
+  sf::Vector2f topleft_vertex{.05f * display_width, .15f * display_height};
 
-  long unsigned n = 4 * width * heigth;
-  sf::VertexArray grid{
-      sf::LineStrip,
-      n};  // sf::LineStrip o sf::Quad ? non ho capito la differenza. con quad non si vede niente, con LineStrip roba brutta
-  sf::Vector2f topleft_vertex{.1f * display_width, .2f * display_height};
+  // fattori di riscalo, sono fissati per prova
+  double xscale = (display_width - 2 * topleft_vertex.x) / width;
+  double yscale = (display_height - 2 * topleft_vertex.y) / height;
 
-  for (int i = 0; i != 2 * width; i++) {
-    for (int j = 0; j != 2 * heigth; j++) {
-      grid[i + j * width].position =
-          sf::Vector2f(topleft_vertex.x + i * 10, topleft_vertex.y + j * 10);
-      grid[i + j * width].color = sf::Color::Black;
+  // Building grid
+  std::vector<sf::RectangleShape> grid(width * height);
+
+  for (int j = 0; j != height; j++) {
+    for (int i = 0; i != width; i++) {
+      grid[i + j * width].setPosition(sf::Vector2f(
+          topleft_vertex.x + i * xscale, topleft_vertex.y + j * yscale));
+      grid[i + j * width].setOutlineColor(sf::Color::Black);
+      grid[i + j * width].setOutlineThickness(2);
+      grid[i + j * width].setSize(sf::Vector2f(xscale, yscale));
     }
   }
+  window.setFramerateLimit(30);
+  sf::Time delta_t = sf::milliseconds(30);
 
   while (window.isOpen()) {
     // managing events
@@ -54,7 +85,24 @@ int main() {
     }
 
     window.clear(sf::Color::White);
-    window.draw(grid);
+
+    for (auto const& s : evolution) {
+      for (int i = 0, n = s.size(); i != n; i++) {
+        if (s[i] == Cell::S) {
+          grid[i].setFillColor(sf::Color::Green);
+        } else {
+          if (s[i] == Cell::I) {
+            grid[i].setFillColor(sf::Color::Red);
+
+          } else {
+            grid[i].setFillColor(sf::Color::Blue);
+          }
+        }
+        window.draw(grid[i]);
+
+      }
+      sf::sleep(delta_t);
+    }
     window.display();
   }
 }

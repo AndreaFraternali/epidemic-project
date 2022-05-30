@@ -24,13 +24,18 @@ std::ostream& operator<<(std::ostream& os, Cell c) {
 }
 
 void Automaton::print() {
-  for (int j = 0; j != heigth_; j++) {
+  for (int j = 0; j != height_; j++) {
     for (int i = 0; i != width_; i++) {
       std::cout << grid_[i + j * width_] << std::setw(4);
     }
     std::cout << '\n';
   }
 }
+
+  Grid Automaton::state(){
+    return grid_;
+  }
+
 
 bool Automaton::set(int i, Cell s) {
   if (grid_[i] != s) {
@@ -54,10 +59,10 @@ int Automaton::check(int const i, int const j, Grid g) {
         tmp_k -= width_;
       }
       if (h < 0) {
-        tmp_h += heigth_;
+        tmp_h += height_;
       }
-      if (h >= heigth_) {
-        tmp_h -= heigth_;
+      if (h >= height_) {
+        tmp_h -= height_;
       }
 
       if (g[tmp_k + tmp_h * width_] == Cell::I) {
@@ -74,7 +79,7 @@ void Automaton::evolve() {
        i++) {  // i è l'indice di colonna, j quello di riga, l'indice del
                // vettore è [i + j * width]
 
-    for (int j = 0; j != heigth_; j++) {
+    for (int j = 0; j != height_; j++) {
       if (yesterday[i + j * width_] == Cell::S) {
         int n = check(i, j, yesterday);
         if (prob(n * beta_ / 8)) {

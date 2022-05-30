@@ -34,6 +34,5 @@ void Graph::add_ylabel(std::string s) {
   sf::Text label{s, font_, 18};
   label.setFillColor(sf::Color::Black);
   label.setPosition(ConvertCoordinates(sf::Vector2f(-20, origin_.y - y_axis_[1].position.y + 15), origin_));
-
   y_label_ = label;
 }
