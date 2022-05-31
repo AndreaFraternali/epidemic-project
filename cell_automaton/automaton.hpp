@@ -29,11 +29,9 @@ class Automaton {
             Grid grid);  // controlla quanti infetti ci sono nelle 8 celle
                          // intorno alle (i + j * 4)-esima
 
-
-
  public:
   void print();  // stampa la griglia grid_
-    bool set(
+  bool set(
       int i,
       Cell s);  // restituisce true se attualmente la cella i è diversa da s
   Grid state();

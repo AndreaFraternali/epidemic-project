@@ -1,8 +1,3 @@
-
-
-// uso random per confrontarlo con probabilità gamma di infettarsi
-// usiamo n/8 * beta probabilità di infettarsi con n numero di infetti intorno
-
 #include "automaton.hpp"
 
 #include <iomanip>
@@ -32,10 +27,7 @@ void Automaton::print() {
   }
 }
 
-  Grid Automaton::state(){
-    return grid_;
-  }
-
+Grid Automaton::state() { return grid_; }
 
 bool Automaton::set(int i, Cell s) {
   if (grid_[i] != s) {

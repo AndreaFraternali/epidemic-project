@@ -4,7 +4,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include <thread> //necessario?
+
 
 int main() {
   // std::cout << "Larghezza = ";
@@ -42,13 +42,8 @@ int main() {
       i++;
     }
   } while (i != init_inf);
-  std::vector<Grid> evolution{};
-  for (int i = 0; i != days; i++) {
-    autom.evolve();
-    evolution.push_back(autom.state());
-  }
 
-  //graphics
+  // graphics
   float display_width = 0.8 * sf::VideoMode::getDesktopMode().width;
   float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
 
@@ -56,13 +51,12 @@ int main() {
                           "Cellular automaton evolution");
   sf::Vector2f topleft_vertex{.05f * display_width, .15f * display_height};
 
-  // fattori di riscalo, sono fissati per prova
+  // fattori di riscalo, sono da rivedere
   double xscale = (display_width - 2 * topleft_vertex.x) / width;
   double yscale = (display_height - 2 * topleft_vertex.y) / height;
 
   // Building grid
   std::vector<sf::RectangleShape> grid(width * height);
-
   for (int j = 0; j != height; j++) {
     for (int i = 0; i != width; i++) {
       grid[i + j * width].setPosition(sf::Vector2f(
@@ -72,8 +66,20 @@ int main() {
       grid[i + j * width].setSize(sf::Vector2f(xscale, yscale));
     }
   }
-  window.setFramerateLimit(30);
-  sf::Time delta_t = sf::milliseconds(30);
+
+  // labels
+  sf::Font font;
+  if (!font.loadFromFile("times.ttf")) {
+  }
+  sf::Text label{"Day : ", font, 24};
+  label.setFillColor(sf::Color::Black);
+  label.setPosition(sf::Vector2f(topleft_vertex.x, topleft_vertex.y - 35));
+  int d = 0;
+  sf::Text day{};
+  day.setPosition(sf::Vector2f(topleft_vertex.x + 60, topleft_vertex.y - 35));
+  day.setFillColor(sf::Color::Black);
+  day.setFont(font);
+  day.setCharacterSize(24);
 
   while (window.isOpen()) {
     // managing events
@@ -86,23 +92,29 @@ int main() {
 
     window.clear(sf::Color::White);
 
-    for (auto const& s : evolution) {
-      for (int i = 0, n = s.size(); i != n; i++) {
-        if (s[i] == Cell::S) {
-          grid[i].setFillColor(sf::Color::Green);
-        } else {
-          if (s[i] == Cell::I) {
-            grid[i].setFillColor(sf::Color::Red);
-
-          } else {
-            grid[i].setFillColor(sf::Color::Blue);
-          }
-        }
-        window.draw(grid[i]);
-
-      }
-      sf::sleep(delta_t);
+    for (auto const& r : grid) {
+      window.draw(r);
     }
+
+    window.draw(label);
+    day.setString(std::to_string(d));
+    window.draw(day);
+
+    autom.evolve();
+    for (int i = 0, n = autom.state().size(); i != n; i++) {
+      if (autom.state()[i] == Cell::S) {
+        grid[i].setFillColor(sf::Color::Green);
+      } else {
+        if (autom.state()[i] == Cell::I) {
+          grid[i].setFillColor(sf::Color::Red);
+
+        } else {
+          grid[i].setFillColor(sf::Color::Blue);
+        }
+      }
+    }
+
+    d++;
     window.display();
   }
 }
