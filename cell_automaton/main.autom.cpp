@@ -5,7 +5,6 @@
 #include <random>
 #include <vector>
 
-
 int main() {
   // std::cout << "Larghezza = ";
   // int width;
@@ -29,7 +28,7 @@ int main() {
   int height = 20;
   double beta = .3;
   double gamma = .1;
-  int days = 100;
+  int days = 10;
   int init_inf = 5;
 
   Automaton autom{width, height, beta, gamma};
@@ -99,22 +98,22 @@ int main() {
     window.draw(label);
     day.setString(std::to_string(d));
     window.draw(day);
-
-    autom.evolve();
-    for (int i = 0, n = autom.state().size(); i != n; i++) {
-      if (autom.state()[i] == Cell::S) {
-        grid[i].setFillColor(sf::Color::Green);
-      } else {
-        if (autom.state()[i] == Cell::I) {
-          grid[i].setFillColor(sf::Color::Red);
-
+    if (d < days) {
+      autom.evolve();
+      for (int i = 0, n = autom.state().size(); i != n; i++) {
+        if (autom.state()[i] == Cell::S) {
+          grid[i].setFillColor(sf::Color::Green);
         } else {
-          grid[i].setFillColor(sf::Color::Blue);
+          if (autom.state()[i] == Cell::I) {
+            grid[i].setFillColor(sf::Color::Red);
+
+          } else {
+            grid[i].setFillColor(sf::Color::Blue);
+          }
         }
       }
-    }
-
     d++;
+    }
     window.display();
   }
 }
