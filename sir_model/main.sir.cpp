@@ -87,9 +87,7 @@ int main() {
   double yscale = (origin.y - delta_y - ymax) / N;
 
   // instance dei punti
-  sf::CircleShape Spoint;
-  sf::CircleShape Ipoint;
-  sf::CircleShape Rpoint;
+  sf::CircleShape point;
 
   // game loop
   while (window.isOpen()) {
@@ -101,7 +99,7 @@ int main() {
       }
     }
     window.clear(sf::Color::White);
-
+  
 
     // drawing legend
     window.draw(legS);
@@ -113,15 +111,15 @@ int main() {
 
     // adding points
     for (int i = 0; i != days; i++) {
-      Spoint.setPosition(ConvertCoordinates(
+      point.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].S * yscale), origin));
-      graph.add_sp(Spoint);
-      Ipoint.setPosition(ConvertCoordinates(
+      graph.add_sp(point);
+      point.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].I * yscale), origin));
-      graph.add_ip(Ipoint);
-      Rpoint.setPosition(ConvertCoordinates(
+      graph.add_ip(point);
+      point.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].R * yscale), origin));
-      graph.add_rp(Rpoint);
+      graph.add_rp(point);
     }
 
     // scrive i numeri lungo gli assi

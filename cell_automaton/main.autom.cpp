@@ -1,4 +1,5 @@
 #include "automaton.hpp"
+#include "graph.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -28,7 +29,7 @@ int main() {
   int height = 20;
   double beta = .3;
   double gamma = .1;
-  int days = 10;
+  int days = 100;
   int init_inf = 5;
 
   Automaton autom{width, height, beta, gamma};
@@ -48,11 +49,23 @@ int main() {
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
-  sf::Vector2f topleft_vertex{.05f * display_width, .15f * display_height};
+  sf::Vector2f topleft_vertex{.02f * display_width, .1f * display_height};
+  sf::Vector2f topright_vertex{.5f * display_width, .1f * display_height};
 
-  // fattori di riscalo, sono da rivedere
-  double xscale = (display_width - 2 * topleft_vertex.x) / width;
-  double yscale = (display_height - 2 * topleft_vertex.y) / height;
+  // fattori di riscalo per la griglia
+  float xscale = (topright_vertex.x - topleft_vertex.x) / width;
+  float yscale = (display_height - 2 * topleft_vertex.y) / height;
+
+  // Building graph
+  sf::Vector2f origin{topright_vertex.x + 40,
+                      topright_vertex.y + height * yscale};
+  Graph graph{origin, .95 * display_width, topleft_vertex.y};
+  graph.add_xlabel("Day");
+  graph.add_ylabel("People");
+  sf::CircleShape circ{};
+  //fattori di riscalo per il grafico  
+  float gscale_x = (.95 * display_width - origin.x) / days; 
+  float gscale_y =  (origin.y - topleft_vertex.y) / (width * height);
 
   // Building grid
   std::vector<sf::RectangleShape> grid(width * height);
@@ -65,6 +78,11 @@ int main() {
       grid[i + j * width].setSize(sf::Vector2f(xscale, yscale));
     }
   }
+
+  // Counters
+    int count_s = 0;
+    int count_i = 0;
+    int count_r = 0;
 
   // labels
   sf::Font font;
@@ -80,6 +98,8 @@ int main() {
   day.setFont(font);
   day.setCharacterSize(24);
 
+  window.setFramerateLimit(5);  // I wish it wuold be necessary
+
   while (window.isOpen()) {
     // managing events
     sf::Event event;
@@ -91,29 +111,43 @@ int main() {
 
     window.clear(sf::Color::White);
 
+    count_s = 0;
+    count_i = 0;
+    count_r = 0;
+
+    window.draw(graph);
     for (auto const& r : grid) {
       window.draw(r);
     }
-
     window.draw(label);
     day.setString(std::to_string(d));
     window.draw(day);
+
     if (d < days) {
       autom.evolve();
       for (int i = 0, n = autom.state().size(); i != n; i++) {
         if (autom.state()[i] == Cell::S) {
           grid[i].setFillColor(sf::Color::Green);
+          count_s++;
         } else {
           if (autom.state()[i] == Cell::I) {
             grid[i].setFillColor(sf::Color::Red);
-
+            count_i++;
           } else {
             grid[i].setFillColor(sf::Color::Blue);
+            count_r++;
           }
         }
       }
-    d++;
+      d++;
     }
+    circ.setPosition(ConvertCoordinates(sf::Vector2f(d * gscale_x, count_s * gscale_y), origin)); 
+    graph.add_sp(circ);
+    circ.setPosition(ConvertCoordinates(sf::Vector2f(d * gscale_x, count_i * gscale_y), origin));
+    graph.add_ip(circ);
+    circ.setPosition(ConvertCoordinates(sf::Vector2f(d * gscale_x, count_r * gscale_y), origin));
+    graph.add_rp(circ);
+
     window.display();
   }
 }
