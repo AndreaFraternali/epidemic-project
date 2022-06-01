@@ -29,19 +29,25 @@ int main() {
   int height = 20;
   double beta = .3;
   double gamma = .1;
-  int days = 100;
-  int init_inf = 5;
+  int days = 10;
+  int init_inf = 50;
+  int init_rem = 0;
 
   Automaton autom{width, height, beta, gamma};
   std::random_device gen{};
   std::uniform_int_distribution<int> dis{0, width * height - 1};
-  int i = 0;
-  do {
+  for (int i = 0; i != init_inf; ) {
     int n = dis(gen);
     if (autom.set(n, Cell::I)) {
       i++;
     }
-  } while (i != init_inf);
+  } 
+  for (int i = 0; i != init_rem; ) {
+    int n = dis(gen);
+    if (autom.set(n, Cell::R)) {
+      i++;
+    }
+  } 
 
   // graphics
   float display_width = 0.8 * sf::VideoMode::getDesktopMode().width;
