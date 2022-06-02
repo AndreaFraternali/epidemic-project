@@ -36,7 +36,7 @@ int main() {
 
   std::vector<Day> evolution{};
   for (int i = 0; i != days; i++) {
-    epidemic.evolve(1);
+    epidemic.evolve();
     evolution.push_back(epidemic.state());
   }
 

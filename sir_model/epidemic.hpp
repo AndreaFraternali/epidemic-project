@@ -12,8 +12,6 @@ struct Day {
   int R;
 };
 
-std::ostream& operator<<(std::ostream& os, Day const& d);
-
 bool operator==(Day const& d1, Day const& d2);
 
 class Epidemic {
@@ -42,8 +40,8 @@ class Epidemic {
   Day state(); 
 
 
-  //evolve l'epidemia al giorno today + d
-  void evolve(int const d);
+  //evolve l'epidemia di un giorno 
+  void evolve();
   
 };
 

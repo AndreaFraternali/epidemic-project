@@ -18,15 +18,6 @@ std::ostream& operator<<(std::ostream& os, Cell c) {
   }
 }
 
-void Automaton::print() {
-  for (int j = 0; j != height_; j++) {
-    for (int i = 0; i != width_; i++) {
-      std::cout << grid_[i + j * width_] << std::setw(4);
-    }
-    std::cout << '\n';
-  }
-}
-
 Grid Automaton::state() { return grid_; }
 
 bool Automaton::set(int i, Cell s) {
