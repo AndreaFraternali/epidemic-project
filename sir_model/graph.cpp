@@ -6,19 +6,19 @@ sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
 }
 
 void Graph::add_sp(sf::CircleShape sp) {
-  sp.setRadius(4);
+  sp.setRadius(3);
   sp.setFillColor(sf::Color::Green);
   points_.push_back(sp);
 }
 
 void Graph::add_ip(sf::CircleShape ip) {
-  ip.setRadius(4);
+  ip.setRadius(3);
   ip.setFillColor(sf::Color::Red);
   points_.push_back(ip);
 }
 
 void Graph::add_rp(sf::CircleShape rp) {
-  rp.setRadius(4);
+  rp.setRadius(3);
   rp.setFillColor(sf::Color::Blue);
   points_.push_back(rp);
 }

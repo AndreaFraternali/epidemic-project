@@ -7,31 +7,27 @@
 #include <vector>
 
 int main() {
-  // std::cout << "Larghezza = ";
-  // int width;
-  // std::cin >> width;
-  // std::cout << "Altezza = ";
-  // int heigth;
-  // std::cin >> heigth;
-  // std::cout << "Infetti iniziali = ";
-  // int init_inf;
-  // std::cin >> init_inf;
-  // std::cout << "Rimossi iniziali = ";
-  // int init_rem;
-  // std::cin >> init_rem;
-  // std::cout << "Beta = ";
-  // double beta;
-  // std::cin >> beta;
-  // std::cout << "Gamma = ";
-  // double gamma;
-  // std::cin >> gamma;
-  int width = 30;
-  int height = 20;
-  double beta = .3;
-  double gamma = .1;
-  int days = 10;
-  int init_inf = 50;
-  int init_rem = 0;
+  std::cout << "Larghezza = ";
+  int width;
+  std::cin >> width;
+  std::cout << "Altezza = ";
+  int height;
+  std::cin >> height;
+  std::cout << "Infetti iniziali = ";
+  int init_inf;
+  std::cin >> init_inf;
+  std::cout << "Rimossi iniziali = ";
+  int init_rem;
+  std::cin >> init_rem;
+  std::cout << "Beta = ";
+  double beta;
+  std::cin >> beta;
+  std::cout << "Gamma = ";
+  double gamma;
+  std::cin >> gamma;
+  std::cout << "Giorni = ";
+  int days;
+  std::cin >> days;
 
   Automaton autom{width, height, beta, gamma};
   std::random_device gen{};
@@ -86,7 +82,7 @@ int main() {
   float gscale_x = (.95 * display_width - origin.x) / days;
   float gscale_y = (origin.y - topleft_vertex.y) / (width * height);
 
-  // labels e legenda 
+  // labels e legenda
   sf::Font font;
   if (!font.loadFromFile("times.ttf")) {
   }
@@ -120,7 +116,7 @@ int main() {
   Rcirc.setFillColor(sf::Color::Blue);
   Rcirc.setPosition(0.95 * display_width, 0.145 * display_height);
 
-  window.setFramerateLimit(5);  // I wish it wuold be necessary
+  window.setFramerateLimit(5);
 
   while (window.isOpen()) {
     // managing events
@@ -132,13 +128,13 @@ int main() {
     }
 
     window.clear(sf::Color::White);
-    //drawing graph
+    // drawing graph
     window.draw(graph);
-    //drawing grid
+    // drawing grid
     for (auto const& r : grid) {
       window.draw(r);
     }
-    //drawing day counter
+    // drawing day counter
     window.draw(label);
     day.setString(std::to_string(d));
     window.draw(day);
@@ -151,7 +147,7 @@ int main() {
     window.draw(Icirc);
     window.draw(Rcirc);
 
-    //evolving autom, setting cells colors and adding points
+    // evolving autom, setting cells colors and adding points
     if (d < days) {
       int count_s = 0;
       int count_i = 0;
