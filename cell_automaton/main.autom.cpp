@@ -1,12 +1,15 @@
 #include "automaton.hpp"
 #include "graph.hpp"
-
+#include <stdexcept>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>
 #include <vector>
+#include <cctype>
 
-int main() {
+int main()
+{
+
   std::cout << "Larghezza = ";
   int width;
   std::cin >> width;
@@ -28,19 +31,55 @@ int main() {
   std::cout << "Giorni = ";
   int days;
   std::cin >> days;
+  /* Exceptions handling
+  non saprei se mettere la condizione di espansione, alla fine potrebbero
+  vedere semplicemnte che l'epidemia non parte: meglio un warning.
+  Da verificare anche l'eccezione quando si inseriscono numeri con la virgola
+  nei rimossi ed infetti. 
+  Isdigit non funziona, da cambiare condizione */
+  if ((gamma < 0 || gamma > 1) || (beta < 0 || beta > 1))
+  {
+    throw std::runtime_error{"Gamma and Beta parameters must be between 0 and 1"};
+  }
+  /*if (isdigit(init_inf) == 0 || isdigit(init_rem) == 0)
+  {
+    throw std::runtime_error { "Initial Infected and removed must be a number" };
+  } */ 
+  else if (init_inf < 0 || init_rem < 0)
+  {
+    throw std::runtime_error{"Initial number of Removed and Infected cannot be negative"};
+  }
+  try
+  {
+    width;
+    height;
+    init_inf;
+    init_rem;
+    beta;
+    gamma;
+    days;
+  }
+  catch (std::runtime_error const &e)
+  {
+    std::cerr << e.what() << "\n";
+  };
 
   Automaton autom{width, height, beta, gamma};
   std::random_device gen{};
   std::uniform_int_distribution<int> dis{0, width * height - 1};
-  for (int i = 0; i != init_inf;) {
+  for (int i = 0; i != init_inf;)
+  {
     int n = dis(gen);
-    if (autom.set(n, Cell::I)) {
+    if (autom.set(n, Cell::I))
+    {
       i++;
     }
   }
-  for (int i = 0; i != init_rem;) {
+  for (int i = 0; i != init_rem;)
+  {
     int n = dis(gen);
-    if (autom.set(n, Cell::R)) {
+    if (autom.set(n, Cell::R))
+    {
       i++;
     }
   }
@@ -60,8 +99,10 @@ int main() {
 
   // Building grid
   std::vector<sf::RectangleShape> grid(width * height);
-  for (int j = 0; j != height; j++) {
-    for (int i = 0; i != width; i++) {
+  for (int j = 0; j != height; j++)
+  {
+    for (int i = 0; i != width; i++)
+    {
       grid[i + j * width].setPosition(sf::Vector2f(
           topleft_vertex.x + i * xscale, topleft_vertex.y + j * yscale));
       grid[i + j * width].setOutlineColor(sf::Color::Black);
@@ -84,7 +125,8 @@ int main() {
 
   // labels e legenda
   sf::Font font;
-  if (!font.loadFromFile("times.ttf")) {
+  if (!font.loadFromFile("times.ttf"))
+  {
   }
   sf::Text label{"Day : ", font, 24};
   label.setFillColor(sf::Color::Black);
@@ -118,11 +160,14 @@ int main() {
 
   window.setFramerateLimit(5);
 
-  while (window.isOpen()) {
+  while (window.isOpen())
+  {
     // managing events
     sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
+    while (window.pollEvent(event))
+    {
+      if (event.type == sf::Event::Closed)
+      {
         window.close();
       }
     }
@@ -131,7 +176,8 @@ int main() {
     // drawing graph
     window.draw(graph);
     // drawing grid
-    for (auto const& r : grid) {
+    for (auto const &r : grid)
+    {
       window.draw(r);
     }
     // drawing day counter
@@ -148,20 +194,28 @@ int main() {
     window.draw(Rcirc);
 
     // evolving autom, setting cells colors and adding points
-    if (d < days) {
+    if (d < days)
+    {
       int count_s = 0;
       int count_i = 0;
       int count_r = 0;
       autom.evolve();
-      for (int i = 0, n = autom.state().size(); i != n; i++) {
-        if (autom.state()[i] == Cell::S) {
+      for (int i = 0, n = autom.state().size(); i != n; i++)
+      {
+        if (autom.state()[i] == Cell::S)
+        {
           grid[i].setFillColor(sf::Color::Green);
           count_s++;
-        } else {
-          if (autom.state()[i] == Cell::I) {
+        }
+        else
+        {
+          if (autom.state()[i] == Cell::I)
+          {
             grid[i].setFillColor(sf::Color::Red);
             count_i++;
-          } else {
+          }
+          else
+          {
             grid[i].setFillColor(sf::Color::Blue);
             count_r++;
           }
