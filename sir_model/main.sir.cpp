@@ -87,16 +87,17 @@ int main() {
   double delta_x = .01 * display_width;
   double delta_y = .02 * display_height;
   Graph graph{origin, xmax, ymax};
+  graph.add_xlabel("giorni");
+  graph.add_ylabel("persone");
 
   // legend objects setting
   sf::Font font{};
   try {
     if (!font.loadFromFile("times.ttf")) {
-      throw std::runtime_error("Opening font file failed");
+      throw std::runtime_error("Lettura del file di font fallita");
     }
   } catch (std::runtime_error const& e) {
     std::cerr << e.what();
-    std::exit(0);
   }
 
   sf::Text legS{"Suscettibili", font, 24};
@@ -144,8 +145,6 @@ int main() {
     window.draw(Scirc);
     window.draw(Icirc);
     window.draw(Rcirc);
-    graph.add_xlabel("giorni");
-    graph.add_ylabel("persone");
 
     // adding points to graph
     for (int i = 0; i != days; i++) {

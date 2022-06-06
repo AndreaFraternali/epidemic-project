@@ -1,108 +1,108 @@
 #include "automaton.hpp"
 #include "graph.hpp"
-#include <stdexcept>
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>
 #include <vector>
-#include <cctype>
 
-int main()
-{
-
-  std::cout << "Larghezza = ";
+int main() {
+  // reading and checking input values
   int width;
-  std::cin >> width;
-  std::cout << "Altezza = ";
   int height;
-  std::cin >> height;
-  std::cout << "Infetti iniziali = ";
   int init_inf;
-  std::cin >> init_inf;
-  std::cout << "Rimossi iniziali = ";
   int init_rem;
-  std::cin >> init_rem;
-  std::cout << "Beta = ";
   double beta;
-  std::cin >> beta;
-  std::cout << "Gamma = ";
   double gamma;
-  std::cin >> gamma;
-  std::cout << "Giorni = ";
   int days;
-  std::cin >> days;
-  /* Exceptions handling
-  non saprei se mettere la condizione di espansione, alla fine potrebbero
-  vedere semplicemnte che l'epidemia non parte: meglio un warning.
-  Da verificare anche l'eccezione quando si inseriscono numeri con la virgola
-  nei rimossi ed infetti. 
-  Isdigit non funziona, da cambiare condizione */
-  if ((gamma < 0 || gamma > 1) || (beta < 0 || beta > 1))
-  {
-    throw std::runtime_error{"Gamma and Beta parameters must be between 0 and 1"};
+  try {
+    std::cout << "Larghezza = ";
+    std::cin >> width;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura della larghezza della griglia fallita");
+    }
+    std::cout << "Altezza = ";
+    std::cin >> height;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura dell'altezza della griglia fallita");
+    }
+    std::cout << "Infetti iniziali = ";
+    std::cin >> init_inf;
+    if (!std::cin) {
+      throw std::runtime_error(
+          "Lettura del numero di infetti iniziali fallita");
+    }
+    if (init_inf <= 0) {
+      throw std::runtime_error(
+          "L'automa cellulare non si evolve con questi dati iniziali");
+    }
+    std::cout << "Rimossi iniziali = ";
+    std::cin >> init_rem;
+    if (!std::cin) {
+      throw std::runtime_error(
+          "Lettura del numero di rimossi iniziali fallita");
+    }
+    std::cout << "Beta = ";
+    std::cin >> beta;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura del parametro beta fallita");
+    }
+    std::cout << "Gamma = ";
+    std::cin >> gamma;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura del parametro gamma fallita");
+    }
+    std::cout << "Giorni = ";
+    std::cin >> days;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura del numero di giorni fallita");
+    }
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what();
+    std::exit(0);
   }
-  /*if (isdigit(init_inf) == 0 || isdigit(init_rem) == 0)
-  {
-    throw std::runtime_error { "Initial Infected and removed must be a number" };
-  } */ 
-  else if (init_inf < 0 || init_rem < 0)
-  {
-    throw std::runtime_error{"Initial number of Removed and Infected cannot be negative"};
-  }
-  try
-  {
-    width;
-    height;
-    init_inf;
-    init_rem;
-    beta;
-    gamma;
-    days;
-  }
-  catch (std::runtime_error const &e)
-  {
-    std::cerr << e.what() << "\n";
-  };
 
-  Automaton autom{width, height, beta, gamma};
+  // creating automaton and setting initial values
+  Automaton autom{};
+  try {
+    Automaton tmp_autom{width, height, beta, gamma};
+    autom = tmp_autom;
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what();
+    std::exit(0);
+  }
   std::random_device gen{};
   std::uniform_int_distribution<int> dis{0, width * height - 1};
-  for (int i = 0; i != init_inf;)
-  {
+  for (int i = 0; i != init_inf;) {
     int n = dis(gen);
-    if (autom.set(n, Cell::I))
-    {
+    if (autom.set(n, Cell::I)) {
       i++;
     }
   }
-  for (int i = 0; i != init_rem;)
-  {
+  for (int i = 0; i != init_rem;) {
     int n = dis(gen);
-    if (autom.set(n, Cell::R))
-    {
+    if (autom.set(n, Cell::R)) {
       i++;
     }
   }
 
   // graphics
-  float display_width = 0.8 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
+  float display_width = 0.9 * sf::VideoMode::getDesktopMode().width;
+  float display_height = 0.8 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
   sf::Vector2f topleft_vertex{.02f * display_width, .1f * display_height};
   sf::Vector2f topright_vertex{.5f * display_width, .1f * display_height};
 
-  // fattori di riscalo per la griglia
+  // grid scale factors
   float xscale = (topright_vertex.x - topleft_vertex.x) / width;
   float yscale = (display_height - 2 * topleft_vertex.y) / height;
 
   // Building grid
   std::vector<sf::RectangleShape> grid(width * height);
-  for (int j = 0; j != height; j++)
-  {
-    for (int i = 0; i != width; i++)
-    {
+  for (int j = 0; j != height; j++) {
+    for (int i = 0; i != width; i++) {
       grid[i + j * width].setPosition(sf::Vector2f(
           topleft_vertex.x + i * xscale, topleft_vertex.y + j * yscale));
       grid[i + j * width].setOutlineColor(sf::Color::Black);
@@ -115,20 +115,24 @@ int main()
   sf::Vector2f origin{topright_vertex.x + 40,
                       topright_vertex.y + height * yscale};
   Graph graph{origin, .95 * display_width, topleft_vertex.y};
-  graph.add_xlabel("Day");
-  graph.add_ylabel("People");
+  graph.add_xlabel("giorni");
+  graph.add_ylabel("persone");
   sf::CircleShape circ{};
 
-  // fattori di riscalo per il grafico
+  // graph scale factors
   float gscale_x = (.95 * display_width - origin.x) / days;
   float gscale_y = (origin.y - topleft_vertex.y) / (width * height);
 
-  // labels e legenda
+  // labels and legend
   sf::Font font;
-  if (!font.loadFromFile("times.ttf"))
-  {
+  try {
+    if (!font.loadFromFile("times.ttf")) {
+      throw std::runtime_error("Lettura del file di font fallita");
+    }
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what() << '\n';
   }
-  sf::Text label{"Day : ", font, 24};
+  sf::Text label{"Giorno : ", font, 24};
   label.setFillColor(sf::Color::Black);
   label.setPosition(sf::Vector2f(topleft_vertex.x, topleft_vertex.y - 35));
   int d = 0;
@@ -160,14 +164,11 @@ int main()
 
   window.setFramerateLimit(5);
 
-  while (window.isOpen())
-  {
+  while (window.isOpen()) {
     // managing events
     sf::Event event;
-    while (window.pollEvent(event))
-    {
-      if (event.type == sf::Event::Closed)
-      {
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
         window.close();
       }
     }
@@ -176,8 +177,7 @@ int main()
     // drawing graph
     window.draw(graph);
     // drawing grid
-    for (auto const &r : grid)
-    {
+    for (auto const& r : grid) {
       window.draw(r);
     }
     // drawing day counter
@@ -194,28 +194,20 @@ int main()
     window.draw(Rcirc);
 
     // evolving autom, setting cells colors and adding points
-    if (d < days)
-    {
+    if (d < days) {
       int count_s = 0;
       int count_i = 0;
       int count_r = 0;
       autom.evolve();
-      for (int i = 0, n = autom.state().size(); i != n; i++)
-      {
-        if (autom.state()[i] == Cell::S)
-        {
+      for (int i = 0, n = autom.state().size(); i != n; i++) {
+        if (autom.state()[i] == Cell::S) {
           grid[i].setFillColor(sf::Color::Green);
           count_s++;
-        }
-        else
-        {
-          if (autom.state()[i] == Cell::I)
-          {
+        } else {
+          if (autom.state()[i] == Cell::I) {
             grid[i].setFillColor(sf::Color::Red);
             count_i++;
-          }
-          else
-          {
+          } else {
             grid[i].setFillColor(sf::Color::Blue);
             count_r++;
           }

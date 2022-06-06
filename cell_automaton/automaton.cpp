@@ -10,14 +10,6 @@ bool prob(double n) {
   return dis(gen) < n;
 }
 
-std::ostream& operator<<(std::ostream& os, Cell c) {
-  if (c == Cell::S) {
-    return os << "S";
-  } else {
-    return (c == Cell::I) ? os << "I" : os << "R";
-  }
-}
-
 Grid Automaton::state() { return grid_; }
 
 bool Automaton::set(int i, Cell s) {

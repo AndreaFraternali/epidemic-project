@@ -37,7 +37,7 @@ class Epidemic {
       throw std::runtime_error("I valori iniziali di S, I, R non possono essere negativi");
     }
     
-    if(beta < gamma || today.I < 2){
+    if(beta < gamma || today.I <= 2){
       throw std::runtime_error("L'epidemia non parte con i parametri inseriti");
     }
 
