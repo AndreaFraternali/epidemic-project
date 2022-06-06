@@ -4,7 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin);
+// Function which converts positions from user-defined coordinates,
+// centred in origin, to SFML ones
+inline sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
+  return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
+}
 
 class Graph : public sf::Drawable {
   sf::VertexArray y_axis_{};

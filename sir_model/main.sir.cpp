@@ -5,39 +5,71 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <vector>
 #include <string>
-
-// Function which converts positions from user-defined coordinates,
-// centred in origin, to SFML ones
-
+#include <vector>
 
 int main() {
-  std::cout << "Numero di giorni =  ";
-  int days;
-  std::cin >> days;
-  std::cout << "Suscettibili iniziali = ";
-  int s;
-  std::cin >> s;
-  std::cout << "Infetti iniziali = ";
-  int i;
-  std::cin >> i;
-  std::cout << "Rimossi iniziali = ";
-  int r;
-  std::cin >> r;
-  std::cout << "Beta = ";
-  double beta;
-  std::cin >> beta;
-  std::cout << "Gamma = ";
-  double gamma;
-  std::cin >> gamma;
-  Epidemic epidemic{beta, gamma, Day{s, i, r}};
-  int const N = s + i + r;
+  // reading and checking input values
+  int days = 0;
+  int s = 0;
+  int i = 0;
+  int r = 0;
+  double beta = 0;
+  double gamma = 0;
+  try {
+    std::cout << "Numero di giorni =  ";
+    std::cin >> days;
+    while (!std::cin) {
+      throw std::runtime_error(
+          "Il numero di giorni deve essere un intero positivo");
+    }
+    std::cout << "Suscettibili iniziali = ";
+    std::cin >> s;
+    if (!std::cin) {
+      throw std::runtime_error(
+          "Lettura del numero di suscettibili iniziali fallita");
+    }
+    std::cout << "Infetti iniziali = ";
+    std::cin >> i;
+    if (!std::cin) {
+      throw std::runtime_error(
+          "Lettura del numero di infetti iniziali fallita");
+    }
+    std::cout << "Rimossi iniziali = ";
+    std::cin >> r;
+    if (!std::cin) {
+      throw std::runtime_error(
+          "Lettura del numero di rimossi iniziali fallita");
+    }
+    std::cout << "Beta = ";
+    std::cin >> beta;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura del parametro beta fallita");
+    }
+    std::cout << "Gamma = ";
+    std::cin >> gamma;
+    if (!std::cin) {
+      throw std::runtime_error("Lettura del parametro gamma fallita");
+    }
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what() << '\n';
+    std::exit(0);
+  }
 
+  int const N = s + i + r;
+  // getting states
+  Epidemic epidemic{};
   std::vector<Day> evolution{};
-  for (int i = 0; i != days; i++) {
-    epidemic.evolve();
-    evolution.push_back(epidemic.state());
+  try {
+    Epidemic tmp_epidemic{beta, gamma, Day{s, i, r}};
+    epidemic = tmp_epidemic;
+    for (int i = 0; i != days; i++) {
+      epidemic.evolve();
+      evolution.push_back(epidemic.state());
+    }
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what();
+    std::exit(0);
   }
 
   // graphics
@@ -45,48 +77,53 @@ int main() {
   float display_height = .7f * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
-                          "SIR model graphics");
+                          "Grafico del modello SIR");
 
   sf::Vector2f origin{0.1f * display_width, 0.9f * display_height};
 
+  // graph instance
   double xmax = .9 * display_width;
   double ymax = .1 * display_height;
   double delta_x = .01 * display_width;
   double delta_y = .02 * display_height;
-
   Graph graph{origin, xmax, ymax};
 
-  // Setting degli oggetti per la legenda
+  // legend objects setting
   sf::Font font{};
-  if (!font.loadFromFile("times.ttf")) {
-    throw std::runtime_error("Opening font file failed");
+  try {
+    if (!font.loadFromFile("times.ttf")) {
+      throw std::runtime_error("Opening font file failed");
+    }
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what();
+    std::exit(0);
   }
 
   sf::Text legS{"Suscettibili", font, 24};
   legS.setFillColor(sf::Color::Black);
-  legS.setPosition(0.7 * display_width, 0.05 * display_height);
+  legS.setPosition(0.7 * display_width, 0.03 * display_height);
   sf::Text legI{"Infetti", font, 24};
   legI.setFillColor(sf::Color::Black);
-  legI.setPosition(0.7 * display_width, 0.09 * display_height);
+  legI.setPosition(0.7 * display_width, 0.07 * display_height);
   sf::Text legR{"Rimossi", font, 24};
   legR.setFillColor(sf::Color::Black);
-  legR.setPosition(0.7 * display_width, 0.13 * display_height);
+  legR.setPosition(0.7 * display_width, 0.11 * display_height);
 
   sf::CircleShape Scirc{8};
   Scirc.setFillColor(sf::Color::Green);
-  Scirc.setPosition(0.85 * display_width, 0.065 * display_height);
+  Scirc.setPosition(0.85 * display_width, 0.045 * display_height);
   sf::CircleShape Icirc{8};
   Icirc.setFillColor(sf::Color::Red);
-  Icirc.setPosition(0.85 * display_width, 0.105 * display_height);
+  Icirc.setPosition(0.85 * display_width, 0.085 * display_height);
   sf::CircleShape Rcirc{8};
   Rcirc.setFillColor(sf::Color::Blue);
-  Rcirc.setPosition(0.85 * display_width, 0.145 * display_height);
+  Rcirc.setPosition(0.85 * display_width, 0.125 * display_height);
 
-  // fattori di riscalo per le posizioni
+  // position scale factors
   double xscale = (xmax - origin.x - delta_x) / days;
   double yscale = (origin.y - delta_y - ymax) / N;
 
-  // instance dei punti
+  // point instance
   sf::CircleShape point;
 
   // game loop
@@ -99,17 +136,18 @@ int main() {
       }
     }
     window.clear(sf::Color::White);
-  
 
-    // drawing legend
+    // drawing legend and labels
     window.draw(legS);
     window.draw(legI);
     window.draw(legR);
     window.draw(Scirc);
     window.draw(Icirc);
     window.draw(Rcirc);
+    graph.add_xlabel("giorni");
+    graph.add_ylabel("persone");
 
-    // adding points
+    // adding points to graph
     for (int i = 0; i != days; i++) {
       point.setPosition(ConvertCoordinates(
           sf::Vector2f(i * xscale, evolution[i].S * yscale), origin));
@@ -122,7 +160,7 @@ int main() {
       graph.add_rp(point);
     }
 
-    // scrive i numeri lungo gli assi
+    // writing numbers along axes
     for (double i = origin.x; i <= xmax; i += days / 10 * xscale) {
       int n = (i - origin.x) / xscale;
       sf::Text num{std::to_string(n), font, 18};
@@ -138,11 +176,7 @@ int main() {
       num.setPosition(origin.x - 6 * delta_x, i - delta_y);
       window.draw(num);
     }
-    
-    graph.add_xlabel("(giorni)");
-    graph.add_ylabel("(persone)");
 
-    
     // drawing graph
     window.draw(graph);
 

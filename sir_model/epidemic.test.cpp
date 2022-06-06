@@ -1,17 +1,17 @@
+#include "epidemic.hpp"
+
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-#include "epidemic.hpp"
 
 TEST_CASE("testing evolve") {
   SUBCASE(
       "1 giorno, 10000 persone, 9980 s, 20 i, 0 r, epidemia in espansione") {
     double gamma = 0.046;
     double beta = 0.056;
-    double v_ratio = 0;
     Day today{9980, 20, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 9979);
     CHECK(s.I == 20);
@@ -21,8 +21,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.046;
     double beta = 0.056;
     Day today{9980, 20, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(0);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 9980);
     CHECK(s.I == 20);
@@ -33,8 +33,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.046;
     double beta = 0.056;
     Day today{9000, 1000, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 8950);
     CHECK(s.I == 1004);
@@ -45,8 +45,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.046;
     double beta = 0.056;
     Day today{0, 10000, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 0);
     CHECK(s.I == 9540);
@@ -56,8 +56,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.046;
     double beta = 0.056;
     Day today{10, 0, 9990};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 10);
     CHECK(s.I == 0);
@@ -69,8 +69,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.1;
     double beta = 0.3;
     Day today{9980, 20, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 9974);
     CHECK(s.I == 24);
@@ -81,8 +81,9 @@ TEST_CASE("testing evolve") {
     double gamma = 0.1;
     double beta = 0.3;
     Day today{9000, 1000, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(2);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 8424);
     CHECK(s.I == 1359);
@@ -94,8 +95,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.1;
     double beta = 0.3;
     Day today{1500, 8000, 500};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 1140);
     CHECK(s.I == 7560);
@@ -106,8 +107,8 @@ TEST_CASE("testing evolve") {
     double gamma = 0.4;
     double beta = 0.2;
     Day today{9000, 1000, 0};
-    Epidemic epidemic{gamma, beta, today};
-    epidemic.evolve(1);
+    Epidemic epidemic{beta, gamma, today};
+    epidemic.evolve();
     auto s = epidemic.state();
     CHECK(s.S == 8820);
     CHECK(s.I == 780);

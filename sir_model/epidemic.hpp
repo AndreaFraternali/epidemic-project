@@ -14,6 +14,8 @@ struct Day {
 
 bool operator==(Day const& d1, Day const& d2);
 
+double fractional(double x);
+
 class Epidemic {
 
   double gamma_{};
@@ -24,23 +26,28 @@ class Epidemic {
   explicit Epidemic(double beta, double gamma, Day today) : gamma_{gamma}, beta_{beta}, today_{today} {
 
     if(gamma < 0 || gamma > 1){
-      throw std::runtime_error{"Gamma parameter must be between 0 and 1"};
+      throw std::runtime_error("Il parametro gamma deve essere compreso tra 0 e 1");
     }
 
     if(beta < 0 || beta > 1){
-      throw std::runtime_error{"Beta parameter must be between 0 and 1"};
+      throw std::runtime_error("Il parametro beta deve essere compreso tra 0 e 1");
     }
 
-    if(today_.I < 0 || today_.S < 0 || today_.R < 0){
-      throw std::runtime_error{"SIR model parameters cannot be negative"};
+    if(today.S < 0 || today.I < 0 || today.R < 0){
+      throw std::runtime_error("I valori iniziali di S, I, R non possono essere negativi");
+    }
+    
+    if(beta < gamma || today.I < 2){
+      throw std::runtime_error("L'epidemia non parte con i parametri inseriti");
     }
 
   };  
 
+  explicit Epidemic() = default;
+
   Day state(); 
 
-
-  //evolve l'epidemia di un giorno 
+  //evolves epidemic by a day
   void evolve();
   
 };
