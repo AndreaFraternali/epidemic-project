@@ -1,16 +1,6 @@
 #include "graph.hpp"
 #include <SFML/Graphics.hpp>
 
-sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
-  return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
-}
-
-void Graph::add_sp(sf::CircleShape sp) {
-  sp.setRadius(3);
-  sp.setFillColor(sf::Color::Green);
-  points_.push_back(sp);
-}
-
 void Graph::add_ip(sf::CircleShape ip) {
   ip.setRadius(3);
   ip.setFillColor(sf::Color::Red);

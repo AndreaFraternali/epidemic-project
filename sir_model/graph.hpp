@@ -2,6 +2,7 @@
 #define GRAPH_HPP
 
 #include <SFML/Graphics.hpp>
+#include <stdexcept>
 #include <vector>
 
 // Function which converts positions from user-defined coordinates,

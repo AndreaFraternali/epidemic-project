@@ -1,8 +1,9 @@
 #ifndef AUTOMATON_HPP
 #define AUTOMATON_HPP
 
-#include <vector>
 #include <random>
+#include <stdexcept>
+#include <vector>
 
 enum class Cell { S, I, R };
 
@@ -20,7 +21,6 @@ class Automaton {
   explicit Automaton(int width, int height, double beta, double gamma,
                      int init_inf, int init_rem)
       : width_{width}, height_{height}, beta_{beta}, gamma_{gamma} {
-
     // handling exceptions
     if (width <= 0 || height <= 0) {
       throw std::runtime_error(
@@ -78,8 +78,8 @@ class Automaton {
 
  private:
   int check(int const i, int const j,
-            Grid const grid) const;  // checks number of infected people in 8 cells around
-                         // [i + j * width]-th one
+            Grid const grid) const;  // checks number of infected people in 8
+                                     // cells around [i + j * width]-th one
 
  public:
   bool set(int const i,

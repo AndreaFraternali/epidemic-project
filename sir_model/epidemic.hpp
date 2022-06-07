@@ -1,7 +1,7 @@
 #ifndef EPIDEMIC_HPP
 #define EPIDEMIC_HPP
 
-#include <ostream>
+#include <stdexcept>
 
 struct Day {
   int S;
