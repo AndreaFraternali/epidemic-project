@@ -1,6 +1,12 @@
 #include "graph.hpp"
 #include <SFML/Graphics.hpp>
 
+void Graph::add_sp(sf::CircleShape sp) {
+  sp.setRadius(3);
+  sp.setFillColor(sf::Color::Green);
+  points_.push_back(sp);
+}
+
 void Graph::add_ip(sf::CircleShape ip) {
   ip.setRadius(3);
   ip.setFillColor(sf::Color::Red);
