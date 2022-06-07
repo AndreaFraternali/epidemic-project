@@ -1,7 +1,6 @@
 #include "graph.hpp"
 #include <SFML/Graphics.hpp>
 
-
 void Graph::add_sp(sf::CircleShape sp) {
   sp.setRadius(3);
   sp.setFillColor(sf::Color::Green);

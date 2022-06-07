@@ -19,9 +19,9 @@ int main() {
   try {
     std::cout << "Numero di giorni =  ";
     std::cin >> days;
-    while (!std::cin) {
+    if (!std::cin) {
       throw std::runtime_error(
-          "Il numero di giorni deve essere un intero positivo");
+          "Lettura del numero di giorni fallita");
     }
     std::cout << "Suscettibili iniziali = ";
     std::cin >> s;
@@ -61,14 +61,13 @@ int main() {
   Epidemic epidemic{};
   std::vector<Day> evolution{};
   try {
-    Epidemic tmp_epidemic{beta, gamma, Day{s, i, r}};
-    epidemic = tmp_epidemic;
+    epidemic = Epidemic{beta, gamma, Day{s, i, r}};
     for (int i = 0; i != days; i++) {
       epidemic.evolve();
       evolution.push_back(epidemic.state());
     }
   } catch (std::runtime_error const& e) {
-    std::cerr << e.what();
+    std::cerr << e.what() << '\n';
     std::exit(0);
   }
 
@@ -86,6 +85,7 @@ int main() {
   double ymax = .1 * display_height;
   double delta_x = .01 * display_width;
   double delta_y = .02 * display_height;
+
   Graph graph{origin, xmax, ymax};
   graph.add_xlabel("giorni");
   graph.add_ylabel("persone");
@@ -97,28 +97,28 @@ int main() {
       throw std::runtime_error("Lettura del file di font fallita");
     }
   } catch (std::runtime_error const& e) {
-    std::cerr << e.what();
+    std::cerr << e.what() << '\n'; 
   }
 
   sf::Text legS{"Suscettibili", font, 24};
   legS.setFillColor(sf::Color::Black);
-  legS.setPosition(.75 * display_width, .03 * display_height);
+  legS.setPosition(.8 * display_width, .02 * display_height);
   sf::Text legI{"Infetti", font, 24};
   legI.setFillColor(sf::Color::Black);
-  legI.setPosition(.75 * display_width, .07 * display_height);
+  legI.setPosition(.8 * display_width, .06 * display_height);
   sf::Text legR{"Rimossi", font, 24};
   legR.setFillColor(sf::Color::Black);
-  legR.setPosition(.75 * display_width, .11 * display_height);
+  legR.setPosition(.8 * display_width, .1 * display_height);
 
   sf::CircleShape Scirc{8};
   Scirc.setFillColor(sf::Color::Green);
-  Scirc.setPosition(.9 * display_width, .045 * display_height);
+  Scirc.setPosition(.95 * display_width, .035 * display_height);
   sf::CircleShape Icirc{8};
   Icirc.setFillColor(sf::Color::Red);
-  Icirc.setPosition(.9 * display_width, .085 * display_height);
+  Icirc.setPosition(.95 * display_width, .075 * display_height);
   sf::CircleShape Rcirc{8};
   Rcirc.setFillColor(sf::Color::Blue);
-  Rcirc.setPosition(.9 * display_width, .125 * display_height);
+  Rcirc.setPosition(.95 * display_width, .115 * display_height);
 
   // position scale factors
   double xscale = (xmax - origin.x - delta_x) / days;
@@ -172,7 +172,7 @@ int main() {
       int n = (origin.y - i) / yscale;
       sf::Text num{std::to_string(n), font, 18};
       num.setFillColor(sf::Color::Black);
-      num.setPosition(origin.x - 6 * delta_x, i);
+      num.setPosition(origin.x - 6 * delta_x, i - delta_y);
       window.draw(num);
     }
 

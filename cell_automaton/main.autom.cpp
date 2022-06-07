@@ -65,6 +65,7 @@ int main() {
     std::cerr << e.what() << '\n';
     std::exit(0);
   }
+  int N = width * height;
 
   // graphics
   float display_width = 0.85 * sf::VideoMode::getDesktopMode().width;
@@ -94,16 +95,18 @@ int main() {
   }
 
   // building graph
-  sf::Vector2f origin{topright_vertex.x + 2 * delta_x,
+  sf::Vector2f origin{topright_vertex.x + 5 * delta_x,
                       topright_vertex.y + height * yscale};
-  Graph graph{origin, .95 * display_width, topleft_vertex.y};
+  double xmax = .95 * display_width;
+  double ymax = topleft_vertex.y;
+  Graph graph{origin, xmax, ymax};
   graph.add_xlabel("giorni");
   graph.add_ylabel("persone");
   sf::CircleShape circ{};
 
   // graph scale factors
-  float gscale_x = (.95 * display_width - origin.x) / days;
-  float gscale_y = (origin.y - topleft_vertex.y) / (width * height);
+  float gscale_x = (xmax - origin.x - delta_x) / days;
+  float gscale_y = (origin.y - topleft_vertex.y - delta_y) / N;
 
   // labels and legend
   sf::Font font;
@@ -114,18 +117,6 @@ int main() {
   } catch (std::runtime_error const& e) {
     std::cerr << e.what() << '\n';
   }
-  sf::Text label{"Giorno : ", font, 24};
-  label.setFillColor(sf::Color::Black);
-  label.setPosition(
-      sf::Vector2f(topleft_vertex.x, topleft_vertex.y - 3 * delta_y));
-  int d = 0;
-  sf::Text day{};
-  day.setPosition(sf::Vector2f(topleft_vertex.x + .07 * display_width,
-                               topleft_vertex.y - 3 * delta_y));
-  day.setFillColor(sf::Color::Black);
-  day.setFont(font);
-  day.setCharacterSize(24);
-
   sf::Text legS{"Suscettibili", font, 22};
   legS.setFillColor(sf::Color::Black);
   legS.setPosition(.85 * display_width, .03 * display_height);
@@ -145,6 +136,18 @@ int main() {
   sf::CircleShape Rcirc{6};
   Rcirc.setFillColor(sf::Color::Blue);
   Rcirc.setPosition(.95 * display_width, .125 * display_height);
+
+  sf::Text label{"Giorno : ", font, 24};
+  label.setFillColor(sf::Color::Black);
+  label.setPosition(
+      sf::Vector2f(topleft_vertex.x, topleft_vertex.y - 3 * delta_y));
+  int d = 0;
+  sf::Text day{};
+  day.setPosition(sf::Vector2f(topleft_vertex.x + .07 * display_width,
+                               topleft_vertex.y - 3 * delta_y));
+  day.setFillColor(sf::Color::Black);
+  day.setFont(font);
+  day.setCharacterSize(24);
 
   window.setFramerateLimit(5);
   // game loop
@@ -178,11 +181,10 @@ int main() {
     window.draw(Rcirc);
 
     // evolving autom, setting cells colors and adding points
-    if (d < days) {
+    if (d <= days) {
       int count_s = 0;
       int count_i = 0;
       int count_r = 0;
-      autom.evolve();
       for (int i = 0, n = autom.state().size(); i != n; i++) {
         if (autom.state()[i] == Cell::S) {
           grid[i].setFillColor(sf::Color::Green);
@@ -206,7 +208,25 @@ int main() {
       circ.setPosition(ConvertCoordinates(
           sf::Vector2f(d * gscale_x, count_r * gscale_y), origin));
       graph.add_rp(circ);
+      autom.evolve();
       d++;
+    }
+
+    // writing numbers along axes
+    for (double i = origin.x; i <= xmax; i += days / 10 * gscale_x) {
+      int n = (i - origin.x) / gscale_x;
+      sf::Text num{std::to_string(n), font, 18};
+      num.setFillColor(sf::Color::Black);
+      num.setPosition(i, origin.y + delta_y);
+      window.draw(num);
+    }
+
+    for (double i = origin.y; i >= ymax; i -= N / 10 * gscale_y) {
+      int n = (origin.y - i) / gscale_y;
+      sf::Text num{std::to_string(n), font, 18};
+      num.setFillColor(sf::Color::Black);
+      num.setPosition(origin.x - 3 * delta_x, i - delta_y);
+      window.draw(num);
     }
 
     window.display();

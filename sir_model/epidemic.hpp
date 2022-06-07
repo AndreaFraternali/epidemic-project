@@ -3,7 +3,6 @@
 #ifndef EPIDEMIC_HPP
 #define EPIDEMIC_HPP
 
-#include <stdexcept>
 #include <ostream>
 
 struct Day {
@@ -12,7 +11,9 @@ struct Day {
   int R;
 };
 
-bool operator==(Day const& d1, Day const& d2);
+inline bool operator==(Day const& d1, Day const& d2){
+  return d1.S == d2.S && d1.I == d2.I && d1.R == d2.R;
+}
 
 double fractional(double x);
 
@@ -47,7 +48,7 @@ class Epidemic {
 
   Day state(); 
 
-  //evolves epidemic by a day
+  //evolves epidemic by a sday
   void evolve();
   
 };

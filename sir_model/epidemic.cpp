@@ -2,12 +2,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <iomanip>
 #include <iostream>
-
-bool operator==(Day const& d1, Day const& d2) {
-  return d1.S == d2.S && d1.I == d2.I && d1.R == d2.R;
-}
 
 double fractional(double x) { return x - std::floor(x); }
 
@@ -23,13 +18,13 @@ void Epidemic::evolve() {
                    gamma_ * yesterday.I;
     double tmp_R = yesterday.R + gamma_ * yesterday.I;
 
-    today_.S = std::round(tmp_S);
-    today_.I = std::round(tmp_I);
-    today_.R = std::round(tmp_R);
-
     double fract_S = fractional(tmp_S);
     double fract_I = fractional(tmp_I);
     double fract_R = fractional(tmp_R);
+
+    today_.S = std::round(tmp_S);
+    today_.I = std::round(tmp_I);
+    today_.R = std::round(tmp_R);
 
     if (N < today_.S + today_.I + today_.R) {
       if (fract_I < fract_S && fract_I < fract_R) {
