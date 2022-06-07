@@ -1,11 +1,8 @@
-// rifiniture: validare l'input e aggiustare distanze
-
 #include "epidemic.hpp"
 #include "graph.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <string>
 #include <vector>
 
 int main() {
@@ -20,8 +17,7 @@ int main() {
     std::cout << "Numero di giorni =  ";
     std::cin >> days;
     if (!std::cin) {
-      throw std::runtime_error(
-          "Lettura del numero di giorni fallita");
+      throw std::runtime_error("Lettura del numero di giorni fallita");
     }
     std::cout << "Suscettibili iniziali = ";
     std::cin >> s;
@@ -55,8 +51,8 @@ int main() {
     std::cerr << e.what() << '\n';
     std::exit(0);
   }
-
   int const N = s + i + r;
+
   // getting states
   Epidemic epidemic{};
   std::vector<Day> evolution{};
@@ -97,7 +93,7 @@ int main() {
       throw std::runtime_error("Lettura del file di font fallita");
     }
   } catch (std::runtime_error const& e) {
-    std::cerr << e.what() << '\n'; 
+    std::cerr << e.what() << '\n';
   }
 
   sf::Text legS{"Suscettibili", font, 24};
@@ -129,7 +125,7 @@ int main() {
 
   // game loop
   while (window.isOpen()) {
-    // managing events
+    // managing closing event
     sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {

@@ -1,7 +1,6 @@
 #include "automaton.hpp"
 
-#include <iomanip>
-#include <iostream>
+#include <vector>
 #include <random>
 
 bool prob(double n) {
@@ -10,7 +9,7 @@ bool prob(double n) {
   return dis(gen) < n;
 }
 
-Grid Automaton::state() { return grid_; }
+Grid Automaton::state() const { return grid_; }
 
 bool Automaton::set(int i, Cell s) {
   if (grid_[i] != s) {
@@ -20,7 +19,7 @@ bool Automaton::set(int i, Cell s) {
   return false;
 }
 
-int Automaton::check(int const i, int const j, Grid g) {
+int Automaton::check(int const i, int const j, Grid g) const {
   int n = 0;
   for (int k = i - 1; k != i + 2; k++) {
     for (int h = j - 1; h != j + 2; h++) {
@@ -50,17 +49,14 @@ int Automaton::check(int const i, int const j, Grid g) {
 
 void Automaton::evolve() {
   Grid yesterday = grid_;
-  for (int i = 0; i != width_;
-       i++) {  // i è l'indice di colonna, j quello di riga, l'indice del
-               // vettore è [i + j * width]
-
+  for (int i = 0; i != width_; i++) {
     for (int j = 0; j != height_; j++) {
+
       if (yesterday[i + j * width_] == Cell::S) {
         int n = check(i, j, yesterday);
         if (prob(n * beta_ / 8)) {
           set(i + j * width_, Cell::I);
         }
-
       } else {
         if (yesterday[i + j * width_] == Cell::I) {
           if (prob(gamma_)) {
@@ -68,6 +64,7 @@ void Automaton::evolve() {
           }
         }
       }
+
     }
   }
 }

@@ -150,9 +150,10 @@ int main() {
   day.setCharacterSize(24);
 
   window.setFramerateLimit(5);
+
   // game loop
   while (window.isOpen()) {
-    // managing events
+    // managing closing event
     sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
@@ -161,15 +162,18 @@ int main() {
     }
 
     window.clear(sf::Color::White);
+
     // drawing graph
     window.draw(graph);
+
     // drawing grid
     for (auto const& r : grid) {
       window.draw(r);
     }
+
     // drawing day counter
     window.draw(label);
-    day.setString(std::to_string(d));
+    day.setString(std::to_string(d - 1));
     window.draw(day);
 
     // drawing legend
