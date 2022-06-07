@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <random>
 #include <vector>
 
 int main() {
@@ -32,10 +31,6 @@ int main() {
       throw std::runtime_error(
           "Lettura del numero di infetti iniziali fallita");
     }
-    if (init_inf <= 0) {
-      throw std::runtime_error(
-          "L'automa cellulare non si evolve con questi dati iniziali");
-    }
     std::cout << "Rimossi iniziali = ";
     std::cin >> init_rem;
     if (!std::cin) {
@@ -58,48 +53,35 @@ int main() {
       throw std::runtime_error("Lettura del numero di giorni fallita");
     }
   } catch (std::runtime_error const& e) {
-    std::cerr << e.what();
+    std::cerr << e.what() << '\n';
     std::exit(0);
   }
 
-  // creating automaton and setting initial values
+  // creating automaton
   Automaton autom{};
   try {
-    Automaton tmp_autom{width, height, beta, gamma};
-    autom = tmp_autom;
+    autom = Automaton{width, height, beta, gamma, init_inf, init_rem};
   } catch (std::runtime_error const& e) {
-    std::cerr << e.what();
+    std::cerr << e.what() << '\n';
     std::exit(0);
-  }
-  std::random_device gen{};
-  std::uniform_int_distribution<int> dis{0, width * height - 1};
-  for (int i = 0; i != init_inf;) {
-    int n = dis(gen);
-    if (autom.set(n, Cell::I)) {
-      i++;
-    }
-  }
-  for (int i = 0; i != init_rem;) {
-    int n = dis(gen);
-    if (autom.set(n, Cell::R)) {
-      i++;
-    }
   }
 
   // graphics
-  float display_width = 0.9 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.8 * sf::VideoMode::getDesktopMode().height;
+  float display_width = 0.85 * sf::VideoMode::getDesktopMode().width;
+  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
   sf::Vector2f topleft_vertex{.02f * display_width, .1f * display_height};
   sf::Vector2f topright_vertex{.5f * display_width, .1f * display_height};
+  float delta_x = .01 * display_width;
+  float delta_y = .02 * display_height;
 
   // grid scale factors
   float xscale = (topright_vertex.x - topleft_vertex.x) / width;
   float yscale = (display_height - 2 * topleft_vertex.y) / height;
 
-  // Building grid
+  // building grid
   std::vector<sf::RectangleShape> grid(width * height);
   for (int j = 0; j != height; j++) {
     for (int i = 0; i != width; i++) {
@@ -111,8 +93,8 @@ int main() {
     }
   }
 
-  // Building graph
-  sf::Vector2f origin{topright_vertex.x + 40,
+  // building graph
+  sf::Vector2f origin{topright_vertex.x + 2 * delta_x,
                       topright_vertex.y + height * yscale};
   Graph graph{origin, .95 * display_width, topleft_vertex.y};
   graph.add_xlabel("giorni");
@@ -134,36 +116,38 @@ int main() {
   }
   sf::Text label{"Giorno : ", font, 24};
   label.setFillColor(sf::Color::Black);
-  label.setPosition(sf::Vector2f(topleft_vertex.x, topleft_vertex.y - 35));
+  label.setPosition(
+      sf::Vector2f(topleft_vertex.x, topleft_vertex.y - 3 * delta_y));
   int d = 0;
   sf::Text day{};
-  day.setPosition(sf::Vector2f(topleft_vertex.x + 60, topleft_vertex.y - 35));
+  day.setPosition(sf::Vector2f(topleft_vertex.x + .07 * display_width,
+                               topleft_vertex.y - 3 * delta_y));
   day.setFillColor(sf::Color::Black);
   day.setFont(font);
   day.setCharacterSize(24);
 
   sf::Text legS{"Suscettibili", font, 22};
   legS.setFillColor(sf::Color::Black);
-  legS.setPosition(0.85 * display_width, 0.05 * display_height);
+  legS.setPosition(.85 * display_width, .03 * display_height);
   sf::Text legI{"Infetti", font, 22};
   legI.setFillColor(sf::Color::Black);
-  legI.setPosition(0.85 * display_width, 0.09 * display_height);
+  legI.setPosition(.85 * display_width, .07 * display_height);
   sf::Text legR{"Rimossi", font, 22};
   legR.setFillColor(sf::Color::Black);
-  legR.setPosition(0.85 * display_width, 0.13 * display_height);
+  legR.setPosition(.85 * display_width, .11 * display_height);
 
   sf::CircleShape Scirc{6};
   Scirc.setFillColor(sf::Color::Green);
-  Scirc.setPosition(0.95 * display_width, 0.065 * display_height);
+  Scirc.setPosition(.95 * display_width, .045 * display_height);
   sf::CircleShape Icirc{6};
   Icirc.setFillColor(sf::Color::Red);
-  Icirc.setPosition(0.95 * display_width, 0.105 * display_height);
+  Icirc.setPosition(.95 * display_width, .085 * display_height);
   sf::CircleShape Rcirc{6};
   Rcirc.setFillColor(sf::Color::Blue);
-  Rcirc.setPosition(0.95 * display_width, 0.145 * display_height);
+  Rcirc.setPosition(.95 * display_width, .125 * display_height);
 
   window.setFramerateLimit(5);
-
+  // game loop
   while (window.isOpen()) {
     // managing events
     sf::Event event;

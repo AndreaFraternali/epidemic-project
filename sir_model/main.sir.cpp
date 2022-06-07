@@ -79,7 +79,7 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Grafico del modello SIR");
 
-  sf::Vector2f origin{0.1f * display_width, 0.9f * display_height};
+  sf::Vector2f origin{.1f * display_width, .9f * display_height};
 
   // graph instance
   double xmax = .9 * display_width;
@@ -102,23 +102,23 @@ int main() {
 
   sf::Text legS{"Suscettibili", font, 24};
   legS.setFillColor(sf::Color::Black);
-  legS.setPosition(0.7 * display_width, 0.03 * display_height);
+  legS.setPosition(.75 * display_width, .03 * display_height);
   sf::Text legI{"Infetti", font, 24};
   legI.setFillColor(sf::Color::Black);
-  legI.setPosition(0.7 * display_width, 0.07 * display_height);
+  legI.setPosition(.75 * display_width, .07 * display_height);
   sf::Text legR{"Rimossi", font, 24};
   legR.setFillColor(sf::Color::Black);
-  legR.setPosition(0.7 * display_width, 0.11 * display_height);
+  legR.setPosition(.75 * display_width, .11 * display_height);
 
   sf::CircleShape Scirc{8};
   Scirc.setFillColor(sf::Color::Green);
-  Scirc.setPosition(0.85 * display_width, 0.045 * display_height);
+  Scirc.setPosition(.9 * display_width, .045 * display_height);
   sf::CircleShape Icirc{8};
   Icirc.setFillColor(sf::Color::Red);
-  Icirc.setPosition(0.85 * display_width, 0.085 * display_height);
+  Icirc.setPosition(.9 * display_width, .085 * display_height);
   sf::CircleShape Rcirc{8};
   Rcirc.setFillColor(sf::Color::Blue);
-  Rcirc.setPosition(0.85 * display_width, 0.125 * display_height);
+  Rcirc.setPosition(.9 * display_width, .125 * display_height);
 
   // position scale factors
   double xscale = (xmax - origin.x - delta_x) / days;
@@ -172,7 +172,7 @@ int main() {
       int n = (origin.y - i) / yscale;
       sf::Text num{std::to_string(n), font, 18};
       num.setFillColor(sf::Color::Black);
-      num.setPosition(origin.x - 6 * delta_x, i - delta_y);
+      num.setPosition(origin.x - 6 * delta_x, i);
       window.draw(num);
     }
 
