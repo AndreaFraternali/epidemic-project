@@ -1,6 +1,7 @@
 #ifndef AUTOMATON_HPP
 #define AUTOMATON_HPP
 
+#include <algorithm>
 #include <random>
 #include <stdexcept>
 #include <vector>
@@ -20,7 +21,7 @@ class Automaton {
  public:
   explicit Automaton(int width, int height, double beta, double gamma,
                      int init_inf, int init_rem)
-      : width_{width}, height_{height}, beta_{beta}, gamma_{gamma} {
+      : grid_(width * height, Cell::S), width_{width}, height_{height}, beta_{beta}, gamma_{gamma} {
     // handling exceptions
     if (width <= 0 || height <= 0) {
       throw std::runtime_error(
@@ -52,11 +53,6 @@ class Automaton {
           "L'automa cellulare non si evolve con questi dati iniziali");
     }
 
-    // setting all the cells to S
-    for (int i = 0; i != height_ * width_; i++) {
-      grid_.push_back(Cell::S);
-    }
-
     // setting init_inf and init_rem
     std::random_device gen{};
     std::uniform_int_distribution<int> dis{0, width * height - 1};
@@ -78,13 +74,13 @@ class Automaton {
 
  private:
   int check(int const i, int const j,
-            Grid const grid) const;  // checks number of infected people in 8
+            Grid const& grid) const;  // checks number of infected people in 8
                                      // cells around [i + j * width]-th one
 
  public:
   bool set(int const i,
            Cell const s);  // returns true if [i]-th cell is not s at present
-  Grid state() const;
+  Grid const& state() const;
   void evolve();
 };
 

@@ -9,7 +9,7 @@ bool prob(double n) {
   return dis(gen) < n;
 }
 
-Grid Automaton::state() const { return grid_; }
+Grid const& Automaton::state() const { return grid_; }
 
 bool Automaton::set(int i, Cell s) {
   if (grid_[i] != s) {
@@ -19,7 +19,7 @@ bool Automaton::set(int i, Cell s) {
   return false;
 }
 
-int Automaton::check(int const i, int const j, Grid g) const {
+int Automaton::check(int const i, int const j, Grid const& g) const {
   int n = 0;
   for (int k = i - 1; k != i + 2; k++) {
     for (int h = j - 1; h != j + 2; h++) {
