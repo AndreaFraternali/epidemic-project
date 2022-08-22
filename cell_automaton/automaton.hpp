@@ -54,21 +54,12 @@ class Automaton {
     }
 
     // setting init_inf and init_rem
+   auto it = std::fill_n(grid_.begin(), init_inf, Cell::I);
+    std::fill_n(it, init_rem, Cell::R);
     std::random_device gen{};
-    std::uniform_int_distribution<int> dis{0, width * height - 1};
-    for (int i = 0; i != init_inf;) {
-      int n = dis(gen);
-      if (set(n, Cell::I)) {
-        i++;
-      }
-    }
-    for (int i = 0; i != init_rem;) {
-      int n = dis(gen);
-      if (set(n, Cell::R)) {
-        i++;
-      }
-    }
-  };
+    std::default_random_engine g{gen()};
+    std::shuffle(grid_.begin(), grid_.end(), g);
+  }
 
   explicit Automaton() = default;
 
