@@ -16,13 +16,13 @@ inline bool operator==(Day const& d1, Day const& d2) {
 double fractional(double x);
 
 class Epidemic {
-  double gamma_{};
   double beta_{};
+  double gamma_{};
   Day today_{};
 
  public:
   explicit Epidemic(double beta, double gamma, Day today)
-      : gamma_{gamma}, beta_{beta}, today_{today} {
+      :  beta_{beta}, gamma_{gamma}, today_{today} {
     if (gamma < 0 || gamma > 1) {
       throw std::runtime_error(
           "Il parametro gamma deve essere compreso tra 0 e 1");
@@ -43,7 +43,7 @@ class Epidemic {
     }
   };
 
-  explicit Epidemic() = default;
+   Epidemic() = default;
 
   Day state() const;
 

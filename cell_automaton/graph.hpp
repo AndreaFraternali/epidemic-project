@@ -7,7 +7,8 @@
 
 // Function which converts positions from user-defined coordinates,
 // centred in origin, to SFML ones
-inline sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
+inline sf::Vector2f ConvertCoordinates(sf::Vector2f const& p,
+                                       sf::Vector2f const& origin) {
   return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
 }
 
@@ -20,7 +21,7 @@ class Graph : public sf::Drawable {
   sf::Font font_{};
   std::vector<sf::CircleShape> points_{};
 
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
     target.draw(y_axis_, states);
     target.draw(x_axis_, states);
     target.draw(x_label_, states);
@@ -48,8 +49,8 @@ class Graph : public sf::Drawable {
     }
   };
 
-  void add_sp(
-      sf::CircleShape sp);  // Points must be added with already-set position
+  // Points must be added with already-set position
+  void add_sp(sf::CircleShape sp);
   void add_ip(sf::CircleShape ip);
   void add_rp(sf::CircleShape rp);
   void add_xlabel(std::string s);

@@ -118,8 +118,8 @@ int main() {
   Rcirc.setPosition(.95 * display_width, .115 * display_height);
 
   // position scale factors
-  double xscale = (xmax - origin.x - delta_x) / days;
-  double yscale = (origin.y - delta_y - ymax) / N;
+  double const xscale = (xmax - origin.x - delta_x) / days;
+  double const yscale = (origin.y - delta_y - ymax) / N;
 
   // point instance
   sf::CircleShape point;

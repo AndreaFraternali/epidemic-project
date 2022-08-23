@@ -20,7 +20,7 @@ class Graph : public sf::Drawable {
   sf::Font font_{};
   std::vector<sf::CircleShape> points_{};
 
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override{
     target.draw(y_axis_, states);
     target.draw(x_axis_, states);
     target.draw(x_label_, states);
@@ -48,6 +48,7 @@ class Graph : public sf::Drawable {
     }
   };
 
+  //Points must be added with already-set position
   void add_sp(sf::CircleShape sp);
   void add_ip(sf::CircleShape ip);
   void add_rp(sf::CircleShape rp);
