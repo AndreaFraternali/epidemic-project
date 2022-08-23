@@ -11,7 +11,7 @@ bool prob(double n) {
 
 Grid const& Automaton::state() const { return grid_; }
 
-bool Automaton::set(int i, Cell s) {
+bool Automaton::set(int i, Cell const& s) {
   if (grid_[i] != s) {
     grid_[i] = s;
     return true;

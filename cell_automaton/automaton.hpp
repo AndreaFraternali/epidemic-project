@@ -70,7 +70,7 @@ class Automaton {
 
  public:
   bool set(int const i,
-           Cell const s);  // returns true if [i]-th cell is not s at present
+           Cell const& s);  // returns true if [i]-th cell is not s at present
   Grid const& state() const;
   void evolve();
 };

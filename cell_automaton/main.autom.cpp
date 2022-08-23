@@ -66,22 +66,24 @@ int main() {
     std::cerr << e.what() << '\n';
     std::exit(0);
   }
-  int N = width * height;
+  int const N = width * height;
 
   // graphics
-  float display_width = 0.85 * sf::VideoMode::getDesktopMode().width;
-  float display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
+  float const display_width = 0.85 * sf::VideoMode::getDesktopMode().width;
+  float const display_height = 0.7 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Cellular automaton evolution");
-  sf::Vector2f topleft_vertex{.02f * display_width, .1f * display_height};
-  sf::Vector2f topright_vertex{.5f * display_width, .1f * display_height};
-  float delta_x = .01 * display_width;
-  float delta_y = .02 * display_height;
+  
+  sf::Vector2f const topleft_vertex{.02f * display_width, .1f * display_height};
+  sf::Vector2f const topright_vertex{.5f * display_width, .1f * display_height};
+  
+  float const delta_x = .01 * display_width;
+  float const delta_y = .02 * display_height;
 
   // grid scale factors
-  float xscale = (topright_vertex.x - topleft_vertex.x) / width;
-  float yscale = (display_height - 2 * topleft_vertex.y) / height;
+  float const xscale = (topright_vertex.x - topleft_vertex.x) / width;
+  float const yscale = (display_height - 2 * topleft_vertex.y) / height;
 
   // building grid
   std::vector<sf::RectangleShape> grid(width * height);
@@ -98,16 +100,16 @@ int main() {
   // building graph
   sf::Vector2f origin{topright_vertex.x + 5 * delta_x,
                       topright_vertex.y + height * yscale};
-  double xmax = .95 * display_width;
-  double ymax = topleft_vertex.y;
+  double const xmax = .95 * display_width;
+  double const ymax = topleft_vertex.y;
   Graph graph{origin, xmax, ymax};
   graph.add_xlabel("giorni");
   graph.add_ylabel("persone");
   sf::CircleShape circ{};
 
   // graph scale factors
-  float gscale_x = (xmax - origin.x - delta_x) / days;
-  float gscale_y = (origin.y - topleft_vertex.y - delta_y) / N;
+  float const gscale_x = (xmax - origin.x - delta_x) / days;
+  float const gscale_y = (origin.y - topleft_vertex.y - delta_y) / N;
 
   // labels and legend
   sf::Font font;
