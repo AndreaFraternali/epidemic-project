@@ -64,6 +64,7 @@ class Automaton {
   explicit Automaton() = default;
 
  private:
+ Cell position(int const i, int const j);
   int check(int const i, int const j,
             Grid const& grid) const;  // checks number of infected people in 8
                                      // cells around [i + j * width]-th one

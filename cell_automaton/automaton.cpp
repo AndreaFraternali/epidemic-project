@@ -9,6 +9,10 @@ bool prob(double n) {
   return dis(gen) < n;
 }
 
+Cell Automaton::position(int const i, int const j) {
+  return grid_[i+j*width_];
+}
+
 Grid const& Automaton::state() const { return grid_; }
 
 bool Automaton::set(int i, Cell const& s) {
@@ -52,13 +56,13 @@ void Automaton::evolve() {
   for (int i = 0; i != width_; i++) {
     for (int j = 0; j != height_; j++) {
 
-      if (yesterday[i + j * width_] == Cell::S) {
+      if (position(i,j) == Cell::S) {
         int n = check(i, j, yesterday);
         if (prob(n * beta_ / 8)) {
           set(i + j * width_, Cell::I);
         }
       } else {
-        if (yesterday[i + j * width_] == Cell::I) {
+        if (position(i,j) == Cell::I) {
           if (prob(gamma_)) {
             set(i + j * width_, Cell::R);
           }
