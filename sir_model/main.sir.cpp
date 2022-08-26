@@ -52,7 +52,7 @@ int main() {
     std::cerr << e.what() << '\n';
     std::exit(0);
   }
-  int const N = s + i + r;
+
 
   // getting states
   Epidemic epidemic{};
@@ -68,7 +68,16 @@ int main() {
     std::exit(0);
   }
 
-  // graphics
+  for (int i = 0; i != days; i++)
+  {
+  std::cout << "Day " << i + 1 << '\n';
+  std::cout << "S: " << evolution[i].S << '\t';
+  std::cout << "I: " << evolution[i].I << '\t';
+  std::cout << "R: " << evolution[i].R << '\n';
+  }
+  
+  int const N = s + i + r;
+
   float display_width = .6f * sf::VideoMode::getDesktopMode().width;
   float display_height = .7f * sf::VideoMode::getDesktopMode().height;
 

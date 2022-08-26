@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 
+
 struct Day {
   int S;
   int I;
@@ -14,6 +15,7 @@ inline bool operator==(Day const& d1, Day const& d2) {
 }
 
 double fractional(double x);
+
 
 class Epidemic {
   double beta_{};
@@ -49,6 +51,7 @@ class Epidemic {
 
   // evolves epidemic by a day
   void evolve();
+  void rounding_int(double tmp_S, double tmp_I, double tmp_R,  double const N);
 };
 
 #endif
