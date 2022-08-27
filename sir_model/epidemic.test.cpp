@@ -132,4 +132,18 @@ TEST_CASE("testing evolve") {
       std::cerr << e.what() << '\n';
     }
   }
+  SUBCASE(
+    "110 persone, 1 giorno, 22 s, 25 i, 63 r, caso particolare") {
+      try {
+      double gamma = 0.2;
+      double beta = 0.5;
+      Day today{22, 25, 63};
+      Epidemic epidemic{beta, gamma, today};
+      epidemic.evolve();
+      auto s = epidemic.state();
+      CHECK(s == Day{19, 23, 68});
+    } catch (std::runtime_error const& e) {
+      std::cerr << e.what() << '\n';
+    }
+  }
 }
