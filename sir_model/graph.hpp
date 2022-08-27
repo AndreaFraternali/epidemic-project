@@ -11,6 +11,16 @@ inline sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
   return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
 }
 
+struct Par 
+{
+  sf::Text legS{};
+  sf::Text legI{};
+  sf::Text legR{};
+  sf::CircleShape Scirc{};
+  sf::CircleShape Icirc{};
+  sf::CircleShape Rcirc{};
+};
+
 class Graph : public sf::Drawable {
   sf::VertexArray y_axis_{};
   sf::VertexArray x_axis_{};
@@ -54,6 +64,12 @@ class Graph : public sf::Drawable {
   void add_rp(sf::CircleShape rp);
   void add_xlabel(std::string s);
   void add_ylabel(std::string s);
+
+  // settings
+  void set_Legend(float const display_width, float const display_height, Par& par);
+  void draw_Leg_Lab(sf::RenderWindow& window, Par& par);
 };
+
+
 
 #endif

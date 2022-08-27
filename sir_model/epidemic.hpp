@@ -51,7 +51,7 @@ class Epidemic {
 
   // evolves epidemic by a day
   void evolve();
-  void rounding_int(double tmp_S, double tmp_I, double tmp_R,  double const N);
+  void rounding_int(double tmp_S, double tmp_I, double tmp_R,  int const N);
 };
 
 #endif
