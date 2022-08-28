@@ -1,7 +1,7 @@
 #include "automaton.hpp"
 
-#include <vector>
 #include <random>
+#include <vector>
 
 bool prob(double n) {
   std::random_device gen{};
@@ -10,17 +10,14 @@ bool prob(double n) {
 }
 
 Cell Automaton::position(int const i, int const j) {
-  return grid_[i+j*width_];
+  return grid_[i + j * width_];
 }
 
 Grid const& Automaton::state() const { return grid_; }
 
-void build_grid()
-{
-  
-}
+void build_grid() {}
 
-bool Automaton::set(int i, Cell const& s) {
+bool Automaton::set(int const i, Cell const& s) {
   if (grid_[i] != s) {
     grid_[i] = s;
     return true;
@@ -60,20 +57,16 @@ void Automaton::evolve() {
   Grid yesterday = grid_;
   for (int i = 0; i != width_; i++) {
     for (int j = 0; j != height_; j++) {
-
-      if (position(i,j) == Cell::S) {
+      if (position(i, j) == Cell::S) {
         int n = check(i, j, yesterday);
         if (prob(n * beta_ / 8)) {
           set(i + j * width_, Cell::I);
         }
       } else {
-        if (position(i,j) == Cell::I) {
-          if (prob(gamma_)) {
-            set(i + j * width_, Cell::R);
-          }
+        if (position(i, j) == Cell::I && prob(gamma_)) {
+          set(i + j * width_, Cell::R);
         }
       }
-
     }
   }
 }

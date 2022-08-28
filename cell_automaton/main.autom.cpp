@@ -99,7 +99,7 @@ int main()
     }
 
     // building graph
-    sf::Vector2f origin{topright_vertex.x + 5 * delta_x,
+    sf::Vector2f const origin{topright_vertex.x + 5 * delta_x,
                         topright_vertex.y + height * yscale};
     double const xmax = .95 * display_width;
     double const ymax = topleft_vertex.y;

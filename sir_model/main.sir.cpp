@@ -82,10 +82,10 @@ int main()
     sf::Vector2f origin{.1f * display_width, .9f * display_height};
 
     // graph instance
-    double xmax = .9 * display_width;
-    double ymax = .1 * display_height;
-    double delta_x = .01 * display_width;
-    double delta_y = .02 * display_height;
+    double const xmax = .9 * display_width;
+    double const ymax = .1 * display_height;
+    double const delta_x = .01 * display_width;
+    double const delta_y = .02 * display_height;
 
     Graph graph{origin, xmax, ymax};
     graph.add_xlabel("giorni");
