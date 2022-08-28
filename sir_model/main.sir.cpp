@@ -69,13 +69,7 @@ int main()
     }
 
     // Printing day
-    for (int i = 0; i != days; i++)
-    {
-      std::cout << "Day " << i + 1 << '\n';
-      std::cout << "S: " << evolution[i].S << '\t';
-      std::cout << "I: " << evolution[i].I << '\t';
-      std::cout << "R: " << evolution[i].R << '\n';
-    }
+    std::cout << evolution;
 
     int const N = s + i + r;
 
@@ -116,6 +110,7 @@ int main()
     sf::CircleShape point;
 
     // Game loop
+    int d_counter = 0;
     while (window.isOpen())
     {
       // Managing closing event
@@ -133,19 +128,20 @@ int main()
       graph.draw_Leg_Lab(window, par);
 
       // Adding points to graph
-      for (int i = 0; i != days; i++)
+      if (d_counter <= days) 
       {
         point.setPosition(ConvertCoordinates(
-            sf::Vector2f(i * xscale, evolution[i].S * yscale), origin));
+            sf::Vector2f(d_counter * xscale, evolution[d_counter].S * yscale), origin));
         graph.add_sp(point);
         point.setPosition(ConvertCoordinates(
-            sf::Vector2f(i * xscale, evolution[i].I * yscale), origin));
+            sf::Vector2f(d_counter * xscale, evolution[d_counter].I * yscale), origin));
         graph.add_ip(point);
         point.setPosition(ConvertCoordinates(
-            sf::Vector2f(i * xscale, evolution[i].R * yscale), origin));
+            sf::Vector2f(d_counter * xscale, evolution[d_counter].R * yscale), origin));
         graph.add_rp(point);
+        ++d_counter;
       }
-
+       
       // Writing numbers along axes
       for (double i = origin.x; i <= xmax; i += days / 10 * xscale)
       {

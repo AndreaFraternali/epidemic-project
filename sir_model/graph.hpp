@@ -11,7 +11,7 @@ inline sf::Vector2f ConvertCoordinates(sf::Vector2f p, sf::Vector2f origin) {
   return sf::Vector2f{p.x + origin.x + 3, origin.y - p.y - 6};
 }
 
-struct Par 
+struct Par // Parameters passed in Graph member functions
 {
   sf::Text legS{};
   sf::Text legI{};

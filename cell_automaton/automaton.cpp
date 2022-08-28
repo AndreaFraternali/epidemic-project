@@ -15,6 +15,11 @@ Cell Automaton::position(int const i, int const j) {
 
 Grid const& Automaton::state() const { return grid_; }
 
+void build_grid()
+{
+  
+}
+
 bool Automaton::set(int i, Cell const& s) {
   if (grid_[i] != s) {
     grid_[i] = s;
