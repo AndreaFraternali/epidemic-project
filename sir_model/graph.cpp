@@ -45,7 +45,7 @@ void Graph::set_Legend(float const display_width, float const display_height, Pa
   par.Rcirc.setPosition(.95 * display_width, .115 * display_height);
 }
 
-void Graph::draw_Leg_Lab(sf::RenderWindow& window, Par& par)
+void Graph::draw_Legend(sf::RenderWindow &window, Par &par)
 {
   window.draw(par.legS);
   window.draw(par.legI);
@@ -70,5 +70,3 @@ void Graph::add_ylabel(std::string s)
   label.setPosition(ConvertCoordinates(sf::Vector2f(-20, origin_.y - y_axis_[1].position.y + 30), origin_));
   y_label_ = label;
 }
-
-

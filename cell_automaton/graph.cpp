@@ -24,7 +24,7 @@ void Graph::set_Legend(float const display_width, float const display_height, Pa
   par.Rcirc.setPosition(.95 * display_width, .125 * display_height);
 }
 
-void Graph::draw_Leg_Lab (sf::RenderWindow& window, Par& par)
+void Graph::draw_Legend (sf::RenderWindow& window, Par& par)
 {
   window.draw(par.legS);
   window.draw(par.legI);

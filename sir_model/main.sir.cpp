@@ -79,6 +79,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                             "Grafico del modello SIR");
 
+    window.setFramerateLimit(30);
     sf::Vector2f origin{.1f * display_width, .9f * display_height};
 
     // graph instance
@@ -110,7 +111,7 @@ int main()
     sf::CircleShape point;
 
     // Game loop
-    int d_counter = 0;
+    int d_count = 0; // days counter
     while (window.isOpen())
     {
       // Managing closing event
@@ -125,21 +126,21 @@ int main()
       window.clear(sf::Color::White);
 
       // Drawing legend and labels
-      graph.draw_Leg_Lab(window, par);
+      graph.draw_Legend(window, par);
 
       // Adding points to graph
-      if (d_counter <= days) 
+      if (d_count <= days) 
       {
         point.setPosition(ConvertCoordinates(
-            sf::Vector2f(d_counter * xscale, evolution[d_counter].S * yscale), origin));
+            sf::Vector2f(d_count * xscale, evolution[d_count].S * yscale), origin));
         graph.add_sp(point);
         point.setPosition(ConvertCoordinates(
-            sf::Vector2f(d_counter * xscale, evolution[d_counter].I * yscale), origin));
+            sf::Vector2f(d_count * xscale, evolution[d_count].I * yscale), origin));
         graph.add_ip(point);
         point.setPosition(ConvertCoordinates(
-            sf::Vector2f(d_counter * xscale, evolution[d_counter].R * yscale), origin));
+            sf::Vector2f(d_count * xscale, evolution[d_count].R * yscale), origin));
         graph.add_rp(point);
-        ++d_counter;
+        d_count++;
       }
        
       // Writing numbers along axes
@@ -171,7 +172,8 @@ int main()
   {
     std::cerr << e.what() << '\n';
   }
-  catch (...) // Catching unknown errors
+  catch (...) 
   {
+    std::cerr << "Unknown exception";
   }
 }

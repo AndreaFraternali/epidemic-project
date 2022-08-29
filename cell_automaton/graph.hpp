@@ -68,7 +68,7 @@ class Graph : public sf::Drawable {
   
   // Settings
   void set_Legend(const float display_width, const float  display_height, Par& par);
-  void draw_Leg_Lab(sf::RenderWindow& window, Par& par);
+  void draw_Legend(sf::RenderWindow& window, Par& par);
 
 };
 

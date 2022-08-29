@@ -9,9 +9,12 @@
 int main()
 {
   // reading and checking input values
-  int width, height;
-  int init_inf, init_rem;
-  double beta, gamma;
+  int width; 
+  int height;
+  int init_inf; 
+  int init_rem;
+  double beta; 
+  double gamma;
   int days;
   try
   {
@@ -167,7 +170,7 @@ int main()
       window.draw(day);
 
       // drawing legend
-      graph.draw_Leg_Lab(window, par);
+      graph.draw_Legend(window, par);
       // evolving autom, setting cells colors and adding points
       if (d <= days)
       {
@@ -234,5 +237,8 @@ int main()
   {
     std::cerr << e.what() << '\n';
   }
-  catch (...) {} // Catching unknown errors
+  catch (...)  
+  {
+    std::cerr << "Unknown exception";
+  } 
 }

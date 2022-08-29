@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 
 struct Day
 {
@@ -16,6 +17,17 @@ inline bool operator==(Day const &d1, Day const &d2)
   return d1.S == d2.S && d1.I == d2.I && d1.R == d2.R;
 }
 
+inline std::ostream &operator<<(std::ostream &os, std::vector<Day> &ep)
+{
+  int day_count = 1;
+  for (Day day : ep)
+  {
+    std::cout << '\n' << "Day " << day_count << '\n';
+    std::cout << "S = " << day.S << '\t' << "I = " << day.I << '\t' << "R = " << day.R << '\n';
+    day_count++;
+  }
+  return os;
+}
 double fractional(double x);
 
 class Epidemic
@@ -60,7 +72,5 @@ public:
   void evolve();
   void rounding_int(double tmp_S, double tmp_I, double tmp_R, int const N);
 };
-
-std::ostream &operator<<(std::ostream &os, std::vector<Day> &ep);
 
 #endif
