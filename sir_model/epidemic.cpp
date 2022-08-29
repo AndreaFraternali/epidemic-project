@@ -9,7 +9,7 @@ double fractional(double x) { return x - std::floor(x); }
 
 Day Epidemic::state() const { return today_; }
 
-// Turning variables from continuos to discrete
+// Turning variables from continuos to discrete and making sure N remains const
 void Epidemic::rounding_int(double tmp_S, double tmp_I, double tmp_R,
                             int const N)
 {
